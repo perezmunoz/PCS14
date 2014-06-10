@@ -1,0 +1,91 @@
+\section{Applications}
+
+\par La configuration Hadoop fournit des exemples plus ou moins complexes dans le but de se familiariser avec cet environnement. A titre d'exemple, dans l'archive hadoop-examples-1.2.1.jar nous retrouvons l'algorithme MapReduce permettant d'estimer la valeur de $\pi$. Afin de mieux comprendre le patron d'architecture MapReduce traitons un cas concret de multiplication de matrices.
+
+\subsection{Multiplication de matrices}
+
+\par Dans le cadre de l'électif STAGVOD (\textit{Stockage et accès à de gros volumes de données}) nous avons été une première fois initiés à Hadoop. L'enseignant s'est particulièrement intéressé à l'algorithme MapReduce permettant de multiplier deux matrices qui est un très bon exemple de compréhension du fonctionnement des méthodes \textit{map} et \textit{reduce}. Vous trouverez en annexe le fichier Mm.java contenant l'implémentation des fonctions.
+
+\subsubsection{La fonction \textit{main}}
+
+\par \textit{map} prend comme entrée un fichier contenant les matrices. Compte tenu de l'implémentation de l'algorithme, il est indispensable que fichier en entrée soit de la forme suivante :
+
+\indent A : [0 1 2 3 4] [5 6 7 8 9]\\
+\indent B : [0 1 2] [3 4 5] [6 7 8] [9 10 11] [12 13 14]
+
+\par Ci-dessous vous trouverez la fonction main :
+
+\begin{minted}[frame=single,linenos,mathescape]{java}
+public static void main(String[] args) throws Exception {
+
+	if (args.length < 2) {
+		System.exit(0);
+	}
+	
+	Configuration conf = new Configuration();
+	// A is an L-rows, M-cols matrix
+	// B is an M-rows, N-cols matrix.
+	conf.set("L", "2");   
+	conf.set("M", "5");
+	conf.set("N", "3");
+
+	Job job = new Job(conf, "MatrixMultiplication");
+	
+	[...]
+}
+\end{minted}
+
+\par Tout d'abord il est essentiel d'initialiser la configuration où le contexte viendra puiser ses données en précisant la taille des matrices. Par conséquent, à chaque changement de matrices, il faudra à nouveau définir la taille des matrices. Le job est ensuite créé sur la base de cette configuration.
+
+\par Le reste de la fonction définit les chemins vers les fichiers .class des fonctions \textit{map} et \textit{reduce}, les formats de la paire (clé, valeur) ainsi que le format des fichiers en entrée et sortie (ici texte).
+  
+\subsubsection{La fonction \textit{map}}
+
+\par Le fichier texte en entrée sera d'abord traité par cette fonction. \textit{map} le lit ligne par ligne le fichier et pour chaque ligne s'exécute une fois. Ce fichier est dans un premier temps splitté au caractère ":" et la lettre A est stockée dans matStruc[0] et les coefficients de cette matrice dans matStrut[1] (valable pour B aussi). A partir de là, un nouveau tableau, matLines, contenant les lignes est créé de telle sorte que \smallskip:\\
+\smallskip
+Pour la matrice A\\
+matLines[0]=[0 1 2 3 4\\
+\smallskip
+matLines[1]=[5 6 7 8 9\\
+Pour la matrice B\\
+matLines[0]=[0 1 2\\
+matLines[1]=[3 4 5\\
+matLines[2]=[6 7 8\\
+matLines[3]=[9 10 11\\
+matLines[4]=[12 13 14\\
+
+\par Selon que ce soit la matrice A ou B, un traitement différent est opéré. En effet, dans le produit de matrices C=A*B, les coefficients de A et B mis en jeu dans le calcul du coefficient (i,j) de C ne sont pas les mêmes. D'où cette distinction.
+
+\par Que ce soit pour A ou B, les tableaux à double entrée créés au début sont remplis avec la valeur des coefficients des matrices correspondantes. (A[0][0]=0, A[0][1]=1, etc...). Le reste du code se charge de créer les paires (clé, valeur). La clé correspond au coefficient de la matrice C. La valeur correspond à un des coefficients mis en jeu dans le produit matriciel.\\ 
+
+\par Pour exemple on a :\\
+
+(C_0_0, (A,0,A[0][0]))  (C_1_0, (A,0,A[1][0]))\\
+(C_0_0, (A,1,A[0][1]))	(C_0_0, (A,1,A[1][1]))\\
+(C_0_0, (A,2,A[0][2]))	(C_0_0, (A,2,A[1][2]))\\
+(C_0_0, (A,3,A[0][3]))	(C_0_0, (A,3,A[1][3]))\\
+(C_0_0, (A,4,A[0][4]))	(C_0_0, (A,4,A[1][4]))\\
+
+\par Le fichier mm\_mapreduce\_explication.txt contient l'ensemble des paires (clé, valeur) des matrices A et B en sortie de la fonction \textit{map}.
+
+\subsubsection{La fonction \textit{reduce}}
+
+\par "mapper" les matrices revient à parser les coefficients des matrices en leur faisant correspondre le coefficient de C dans lequel il est impliqué. A ce stade, l'ensemble des paires (clé, valeur) nécessaires à la multiplication puis addition pour le calcul des coefficients de C ont été obtenues.
+
+\par Le rôle de la fonction \textit{reduce} est d'isoler la bonne ligne de A et la bonne colonne de B auxquelles ont assigne la bonne clé. Elle va ainsi récupérer par clé les lots de deux vecteurs (celui associé à A et celui associé à B) correspondant à un élément scalaire de la matrice finale, puis multiplier deux à deux leurs éléments et les sommer.
+
+\par Par exemple pour C00 on a :\\
+
+    (C_0_0, (A,0,A[0][0]))   x   (C_0_0, (B,0,B[0][0]))\\
+ +  (C_0_0, (A,1,A[0][1]))   x   (C_0_0, (B,1,B[1][0]))\\
+ +  (C_0_0, (A,2,A[0][2]))   x   (C_0_0, (B,2,B[2][0]))\\
+ +  (C_0_0, (A,3,A[0][3]))   x   (C_0_0, (B,3,B[3][0]))\\
+ +  (C_0_0, (A,4,A[0][4]))   x   (C_0_0, (B,4,B[4][0]))\\
+ =	 C_0_0 final
+
+\par Hadoop n'est pas du tout adapté au multiplication de matrices. Ceci est un exemple dans le but unique de comprendre l'algorithme MapReduce. Le fichier de sortie obtenu se trouve en annexe sous le nom output_matmult.txt.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "CompteRendu"truct.
+%%% End: 

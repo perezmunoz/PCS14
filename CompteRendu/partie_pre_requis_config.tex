@@ -1,0 +1,97 @@
+\section{Pré-requis de configuration}
+
+\subsection{Généralités}
+
+\par Sortie le 1er août 2013, la version 1.2.1 de Hadoop est considérée stable. Ce document donne les étapes nécessaires à l'installation de ce framework Java. Installation et compréhension des concepts ne sont pas à porter de mains. C’est pourquoi, ce guide ne prétend pas être exhaustif, le lecteur sera amené à chercher des informations par lui-même.
+
+\par Pour de plus amples renseignements sur cette version, rendez-vous sur :
+\textit{http://hadoop.apache.org/docs/r1.2.1/}
+
+\subsection{Matériel utilisé}
+
+\par L'installation effectuée dans le cadre de notre projet a été réalisée sur un MacBook Pro sous OSX 10.9.2 Mavericks datant de fin 2011 et doté d'un processeur 2,4 GHz Intel Core i5.
+
+\subsection{Création d'un nouvel utilisateur}
+
+\par L'installation de Hadoop sur votre ordinateur est effectuée dans une première partie en mode \textit{Single Node}, autrement dit Hadoop déploiera ses calculs que sur votre machine, contrairement au mode \textit{Multi-Node Cluster} dans lequel plusieures machines sont agrégées dans le but d'augmenter la puissance de calcul.
+
+\par Configurer Hadoop fait appel à l'écriture sur des fichiers susceptibles, en cas de mauvaise utilisation, d'altérer le bon fonctionnement de votre machine. Il est par conséquent conseillé de créer un nouvel utilisateur. De ce fait, Hadoop fait référence tout au long de ce document à l'utilisateur/session dédié à Hadoop. Celle-ci devra posséder les droits administrateur.
+
+\subsection{Installation de Java}
+
+\par Une fois le nouvel utilisateur Hadoop créé, ouvrez la session. Afin que Hadoop fonctionne correctement il est nécessaire d'avoir une version de Java supérieure à la version 1.5. 
+
+\par Pour connaître la version installée sur votre machine, ouvrez votre Terminal et tapez :
+
+\begin{verbatim}
+$ java -version
+\end{verbatim}
+
+\par Vous obtiendrez une réponse de ce style. Ci-dessous vous pouvez constater que la version Java installée est la 1.7.
+
+\begin{verbatim}
+java version "1.7.0_21"
+Java(TM) SE Runtime Environment (build 1.7.0_21-b12)
+Java HotSpot(TM) 64-Bit Server VM (build 23.21-b01, mixed mode)
+\end{verbatim}
+
+\par Dans le cas où une version de Java en-dessous de la 1.5 est installée, rendez-vous sur http://www.java.com/fr et suivez les instructions de téléchargement et d'installation.
+
+\subsection{Configuration du SSH}
+
+\par L'accès aux différents noeuds via Hadoop nécessite de configurer le SSH (\textit{Secure Shell}). Dans notre mode de fonctionnement, seul la configuration du localhost est nécessaire. Dans le mode cluster, chaque noeud sera accédé par SSH. Pour ce faire, vous devez générer une clé SSH pour votre session Hadoop. Sur votre terminal, tapez :
+
+\begin{verbatim}
+ordinatrthidiff:~ Hadoop$ su - Hadoop
+ordinatrthidiff:~ Hadoop$ ssh-keygen -t rsa -P ""
+Generating public/private rsa key pair.
+Enter file in which to save the key (/Users/Hadoop/.ssh/id_rsa) :
+Created directory '/Users/Hadoop/.ssh' .
+Your identification has been saved in /Users/Hadoop/.ssh/id_rsa.pub.
+80:37:49:f6:47:35:d1:86:85:00:39:d1:f0:8e:d3:8a Hadoop@Ordinateur-ThiDiff.local
+The key's randomart image is:
++--[ RSA 2048]----+
+|      o +*oo+*.  |
+|     + ooo. o.o  |
+|    . = ..o  .   |
+|     . o =       |
+|        S o      |
+|       . o       |
+|      E .        |
+|                 |
+|                 |
++-----------------+
+Ordinateur-ThiDiff:~ Hadoop$
+\end{verbatim}
+
+\par Tapez sur la touche Entrée. La seconde ligne du code \textit{bash} ci-dessus génère une clé RSA avec un mot de passe vide. De façon général ceci n'est pas conseillé mais étant donné que nous travaillons que en local actuellement, cela ne pose aucun problème de sécurité. Ceci évite d'entrer la mot de passe à chaque connexion.
+
+\par Désormais nous devons autoriser l'accès SSH sur notre machine à l'aide de la clé RSA préalablement créée. Pour ce faire, vous devez autoriser cette clé en la plaçant dans le fichier contenant la liste des clés autorisées. Pour ce faire :
+
+\begin{verbatim}
+ordinatrthidiff:~ Hadoop$ cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
+\end{verbatim}
+
+\par La connexion SSH sur votre machine est théoriquement possible. Pour rappel, votre machine est nomée localhost.
+
+\begin{verbatim}
+ordinatrthidiff:~ Hadoop$ ssh localhost
+The authenticity of host 'localhost (127.0.0.1)' can't be established.
+RSA key fingerprint is 6c:8b:6f:43:42:ee:f3:27:ca:af:28:ea:51:08:a4:21.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'localhost' (RSA) to the list of known hosts.
+Last login: Sat May 31 19:00:12 2014 from localhost
+Ordinateur-ThiDiff:~ Hadoop$
+\end{verbatim} 
+
+\par Lors de votre première connexion, votre machine est enregistrée dans la liste des hôtes connus. Ainsi, à la prochaine connexion elle sera reconnue. Pour vous déconnecter, rien de plus simple :
+
+\begin{verbatim}
+Ordinateur-ThiDiff:~ Hadoop$ logout
+Connection to localhost closed.
+\end{verbatim}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "CompteRendu"
+%%% End: 

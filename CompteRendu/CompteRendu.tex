@@ -1,0 +1,47 @@
+\include{styles}
+\usepackage{minted}
+\usepackage{verbatim}
+\let\verbatiminput=\verbatimtabinput
+\everymath{\displaystyle}
+\addtolength{\textheight}{1cm}
+
+\makeindex
+\begin{document}
+\thispagestyle{empty}
+\include{page_garde}
+\thispagestyle{empty}
+\newpage
+\null
+\thispagestyle{empty}
+\newpage 
+
+\tableofcontents
+\thispagestyle{empty}
+\newpage
+
+\thispagestyle{empty}
+\null
+\newpage
+
+% Introduction
+\include{partie_introduction}
+
+% Description du système de fichiers Hadoop (HDFS)
+\include{partie_descrition_hdfs}
+
+% Description du patron de conception MapReduce
+\include{partie_description_mapreduce}
+
+% Configuration préalables à l'installation d'Hadoop
+\include{partie_pre_requis_config}
+
+% Installation d'Hadoop
+\include{partie_installation}
+
+% Exemples de traitements "Big Data"
+\include{parties_exemples}
+
+% Conclusion
+\include{partie_conclusion}
+
+\end{document}

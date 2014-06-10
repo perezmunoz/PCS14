@@ -1,0 +1,251 @@
+\section{Hadoop 1.2.1}
+\subsection{Préparation d'Hadoop}
+
+\par Actuellement il est possible de trouver sur le serveur Apache toutes les versions de Hadoop. Cependant il est préférable de travailler avec des versions considérées comme stables. C'est notamment le cas pour les versions 1.2.x, 2.2.x et 2.3.x. Notre projet est basé sur la version 1.2.1.
+
+\par Sur le lien ci-dessous, téléchargez le fichier hadoop-1.2.1.tar.gz  (61 Mb) :\\
+\textit{http://apache.mirrors.multidist.eu/hadoop/common/hadoop-1.2.1/}
+
+\par Une fois téléchargé, décompressez le fichier, renommez-le en hadoop et placez le dans /usr/local. Il est de plus très important de changer le propriétaire de ce fichier :
+
+\begin{verbatim}
+Ordinateur-ThiDiff:~ Hadoop$ cd /Users/Hadoop/Downloads
+Ordinateur-ThiDiff:~ Hadoop$ mv hadoop-1.2.1 hadoop
+Ordinateur-ThiDiff:~ Hadoop$ mv hadoop /usr/local
+Ordinateur-ThiDiff:~ Hadoop$ sudo chown Hadoop hadoop
+\end{verbatim}
+
+\par Vérifiez que le nouveau propriétaire du fichier hadoop est bien votre session Hadoop :
+
+\begin{verbatim}
+Ordinateur-ThiDiff:~ Hadoop$ cd /usr/local
+Ordinateur-ThiDiff:local Hadoop$ ls -lisa | grep hadoop
+26284444  0 drwxr-xr-x@  29 Hadoop   admin    986  3 mai 14:12 hadoop
+\end{verbatim}
+
+\par Hadoop téléchargé, il faut désormais configurer quelques fichiers propres à Hadoop et qui font sa spécificité. Par conséquent, on ne parle par  d'installation mais plutôt de configuration car il s'agit tout au long de définir les bonnes propriétés.
+
+\subsection{Débriefing du dossier hadoop}
+
+\par Le dossier hadoop contient de nombreux sous-dossier qui ne sont pas tous aussi utiles les uns que les autres. En voici la liste :
+
+\begin{verbatim}
+CHANGES.txt		docs					ivy.xml
+LICENSE.txt		hadoop-ant-1.2.1.jar			lib
+NOTICE.txt		hadoop-client-1.2.1.jar			libexec
+README.txt		hadoop-core-1.2.1.jar			logs
+bin			hadoop-examples-1.2.1.jar		sbin
+build.xml		hadoop-minicluster-1.2.1.jar		share
+c++			hadoop-test-1.2.1.jar			src
+conf
+\end{verbatim}
+
+\par Nous nous attardons que sur les dossiers bin et conf qui se sont montrés essentiels lors de notre étude d'Hadoop, laissant ainsi le lecteur s'intéresser de plus près aux autres fichiers.
+
+\par A titre anecdotique, les fichiers hadoop-*.jar contiennent les librairies nécessaires à la compilation et à l'exécution des exemples contenus notamment dans le fichier hadoop-examples-1.2.1.jar (WordCount, etc...).
+
+\par Ci-dessous quelques fichiers contenus dans le dossier bin que vous aurez à utiliser sans cesse par la suite afin de lancer Hadoop.
+
+\begin{verbatim}
+start-all.sh			stop-all.sh			
+\end{verbatim}
+
+\par Ces scripts shell vont permettent de lancer ou d'arrêter les différents démons d'Hadoop à savoir : le NameNode (NN), le DataNode, le SecondaryNameNode, le JobTracker et le TaskTracker. Pour de plus amples détails référez-vous à la partie détaillant chaque démon. Par conséquent, il sera possible de tout lancer simultanément ou de lancer au fur et à mesure chaque démon à l'aide des autres scripts.
+
+\par Le dossier conf est le plus important de tous car il contient les fichiers permettant de configurer Hadoop. Quatre fichiers ont leur grande importance et qui seront détaillés par la suite :
+
+\begin{verbatim}
+hadoop-env.sh			mapred-site.xml
+core-site.xml			hdfs-site.xml
+\end{verbatim}
+
+\subsection{Le fichier .bashrc}
+
+\par Le fichier .bashrc fait parti des fichiers lus lorsque le shell est invoqué comme shell interactif sans fonction de connexion. Il est essentiel de définir quelques variables de l'environnement Hadoop dans ce dernier. Celui-ci se trouve dans \$HOME, si ce n'est pas le cas il suffit de le créér et devra contenir les informations ci-dessous.
+
+\begin{verbatim}
+# Hadoop environment variables
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_21.jdk
+		  /Contents/Home
+export HADOOP_HOME=/usr/local/hadoop
+
+# Add Hadoop bin/ dir to PATH Hadoop autocompletion commands
+export PATH=$PATH:$HADOOP_HOME/bin
+export PATH=$PATH:$HADOOP_HOME/sbin
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+\end{verbatim}
+
+\par Hadoop a recours à Java, c'est pourquoi JAVA\_HOME est défini. Les autres variables définies permettent de définir les dossiers sur lesquels Hadoop devra être amené à travailler.
+
+\subsection{Le fichier hadoop-env.sh}
+
+\par Ce fichier contient les variables d'environnement nécessaires à Hadoop. Pour notre installation, seule la variable JAVA\_HOME doit être précisée. Pour l'obtenir, tapez la commande cat \$(/usr/libexec/java\_home). Votre fichier doit contenir :
+
+\begin{verbatim}
+# The java implementation to use.  Required.
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_21.jdk
+		  /Contents/Home
+\end{verbatim}
+
+\subsection{Les fichiers *-site.xml}
+
+\par Les trois fichiers *-site.xml permettent de configurer le dossier où Hadoop stock les fichiers de données, les ports utilisés, le nombre de réplication des blocs, etc.
+
+\subsubsection{core-site.xml}
+
+\par Ce fichier XML contient les informations générales d'Hadoop. Entre autres, il définit le dossier dans lequel Hadoop stockera les données temporaires lors de l'exécution des tâches. Il définit aussi le nom et le port du système de fichiers qui a rendu célèbre Hadoop : HDFS (\textit{Hadoop Distributed File System}).
+
+\begin{verbatim}
+<configuration>
+
+<property>
+	<name>hadoop.tmp.dir</name>
+	<value>/app/hadoop/tmp</value>
+	<description>A base for other temporary directories.</description>
+</property>
+
+<property>
+   <name>fs.default.name</name>
+   <value>hdfs://localhost:54310</value>
+ </property>
+
+</configuration>
+\end{verbatim}
+
+\par /app/hadoop/tmp est le dossier contenant les données temporaires stockées par Hadoop aussi bien pour le système de fichier local que HDFS. Créez ce dossier et donnez-lui tous les droits d'accès :
+
+\begin{verbatim}
+Ordinateur-ThiDiff:~ Hadoop$ sudo mkdir -p /app/hadoop/tmp
+Ordinateur-ThiDiff:~ Hadoop$ sudo chown Hadoop /app/hadoop/tmp
+Ordinateur-ThiDiff:~ Hadoop$ sudo chmod 750 /app/hadoop/tmp
+\end{verbatim}
+
+\par Ne pas donner l'intégralité des droits à la session Hadoop produira une exception java.io.Exception lors du formatage du NameNode (confère partie suivante).
+
+\subsubsection{mapred-site.xml}
+
+\par Rappelons-le, Hadoop a deux principales composantes : HDFS et MapReduce. Ce fichier permet de configurer le deuxième point et plus particulièrement le JobTracker qui est le service d'Hadoop permettant de suivre les tâches. Pour cela on lui attribut un port sur lequel, à travers une interface web comme nous verrons plus loin, allons venir lire les informations concernant les jobs.
+
+\begin{verbatim}
+<configuration>
+
+<property>
+	<name>mapred.job.tracker</name>
+    <value>localhost:54311</value>
+</property>
+
+</configuration>
+\end{verbatim}
+
+\subsubsection{hdfs-site.xml}
+
+\par Ce dernier fichier définit les propriétés relatives au système de fichiers propre à Hadoop : HDFS. On y définit particulièrement le nombre de réplications des blocs. Nous ne nous attarderons pas d'avantage sur ce point à l'heure actuelle.
+
+\begin{verbatim}
+<configuration>
+
+<property>
+	<name>dfs.replication</name>
+	<value>1</value>
+</property>
+
+</configuration>
+\end{verbatim}
+
+\par La configuration basique d'Hadoop en mode \textit{Single Node} ne nécessite que la modification des fichiers mentionnés précédemment. Pour le mode \textit{Multi Node} nous verrons que les fichiers /conf/masters et /conf/slaves auront leur importance.
+
+\subsection{Formatage du NameNode}
+
+\par La dernière étape restante avant de pouvoir lancer des jobs Hadoop est de formater le NameNode. Ce service Hadoop est la pièce maîtresse de HDFS en ce qu'il conserve l'arborescence de tous les fichiers HDFS au sein des DataNodes. Il contient par conséquent l'ensemble des métadonnées des fichiers HDFS.
+
+\par Le formatage du NameNode permet d'effacer l'ensemble des données de HDFS. C'est équivalent à un RAZ. Cette étape n'est à réaliser qu'une seule fois lors de la mise en place de votre cluster Hadoop sous risque de perdre toutes les données HDFS présentes sur votre cluster.
+
+\begin{verbatim}
+ordinatrthidiff:~ Hadoop$ $HADOOP_HOME/bin/hadoop namenode -format
+14/06/01 00:18:33 INFO namenode.NameNode: STARTUP_MSG: 
+/************************************************************
+STARTUP_MSG: Starting NameNode
+STARTUP_MSG:   host = ordinatrthidiff/192.168.1.66
+STARTUP_MSG:   args = [-format]
+STARTUP_MSG:   version = 1.2.1
+STARTUP_MSG:   build = https://svn.apache.org/repos/asf/hadoop/common/branches/branch-1.2 -r 1503152; compiled by 'mattf' on Mon Jul 22 15:23:09 PDT 2013
+STARTUP_MSG:   java = 1.7.0_21
+************************************************************/
+14/06/01 00:18:35 INFO util.GSet: Computing capacity for map BlocksMap
+14/06/01 00:18:35 INFO util.GSet: VM type       = 64-bit
+14/06/01 00:18:35 INFO util.GSet: 2.0% max memory = 1013645312
+14/06/01 00:18:35 INFO util.GSet: capacity      = 2^21 = 2097152 entries
+14/06/01 00:18:35 INFO util.GSet: recommended=2097152, actual=2097152
+2014-06-01 00:18:35.649 java[10479:1b03] Unable to load realm info from SCDynamicStore
+14/06/01 00:18:36 INFO namenode.FSNamesystem: fsOwner=Hadoop
+14/06/01 00:18:36 INFO namenode.FSNamesystem: supergroup=supergroup
+14/06/01 00:18:36 INFO namenode.FSNamesystem: isPermissionEnabled=true
+14/06/01 00:18:36 INFO namenode.FSNamesystem: dfs.block.invalidate.limit=100
+14/06/01 00:18:36 INFO namenode.FSNamesystem: isAccessTokenEnabled=false accessKeyUpdateInterval=0 min(s), accessTokenLifetime=0 min(s)
+14/06/01 00:18:36 INFO namenode.FSEditLog: dfs.namenode.edits.toleration.length = 0
+14/06/01 00:18:36 INFO namenode.NameNode: Caching file names occuring more than 10 times 
+14/06/01 00:18:38 INFO common.Storage: Image file /app/hadoop/tmp/dfs/name/current/fsimage of size 112 bytes saved in 0 seconds.
+14/06/01 00:18:38 INFO namenode.FSEditLog: closing edit log: position=4, editlog=/app/hadoop/tmp/dfs/name/current/edits
+14/06/01 00:18:38 INFO namenode.FSEditLog: close success: truncate to 4, editlog=/app/hadoop/tmp/dfs/name/current/edits
+14/06/01 00:18:38 INFO common.Storage: Storage directory /app/hadoop/tmp/dfs/name has been successfully formatted.
+14/06/01 00:18:38 INFO namenode.NameNode: SHUTDOWN_MSG: 
+/************************************************************
+SHUTDOWN_MSG: Shutting down NameNode at ordinatrthidiff/192.168.1.66
+************************************************************/
+\end{verbatim}
+
+\par Hadoop est désormais configuré. L'étape suivante consiste à lancer les différents services Hadoop.
+
+\subsection{Lancement des services Hadoop}
+
+\par A chaque fois que vous souhaitez lancer les services Hadoop vous devrez suivre les étapes suivantes :
+
+\begin{itemize}
+\item se connecter via SSH au localhost;
+\item forcer la lecture du fichier .bashrc à l'aide de la commande "source .bashrc";
+\end{itemize}
+
+\par Il suffit ensuite de lancer le script shell fournit dans le dossier Hadoop (/bin/start-all.sh) :
+
+\begin{verbatim}
+ordinatrthidiff:~ Hadoop$ start-all.sh
+starting namenode, logging to /usr/local/hadoop/libexec/../logs/hadoop-Hadoop-namenode-ordinatrthidiff.out
+localhost: starting datanode, logging to /usr/local/hadoop/libexec/../logs/hadoop-Hadoop-datanode-ordinatrthidiff.out
+localhost: starting secondarynamenode, logging to /usr/local/hadoop/libexec/../logs/hadoop-Hadoop-secondarynamenode-ordinatrthidiff.out
+starting jobtracker, logging to /usr/local/hadoop/libexec/../logs/hadoop-Hadoop-jobtracker-ordinatrthidiff.out
+localhost: starting tasktracker, logging to /usr/local/hadoop/libexec/../logs/hadoop-Hadoop-tasktracker-ordinatrthidiff.out
+\end{verbatim}
+
+\par On voit sur la sortie que le NameNode, le DataNode, le SecondaryNameNode, le JobTracker et le TaskTracker se sont lancés. Cependant il est bon de vérifier leur état à l'aide de la commande jps (\textit{Java Virtual Machine Process Status Tool}).
+
+\begin{verbatim}
+ordinatrthidiff:~ Hadoop$ jps
+10649 DataNode
+10891 TaskTracker
+10560 NameNode
+10803 JobTracker
+11087 Jps
+10737 SecondaryNameNode
+\end{verbatim}
+
+\par Nous sommes désormais sûrs que les services Hadoop se sont lancés correctement. En effet, il se peut que NameNode ou le DataNode ne se lancent pas. Dans ce cas la solution la plus radicale et la plus efficace consiste à formater à nouveau le NameNode. Pour ce faire, vous devez arrêter les services et suivre la démarche détaillée précédemment.
+
+\subsection{Arrêt des services Hadoop}
+
+\par L'arrêt des services Hadoop s'effectue avec :
+
+\begin{verbatim}
+ordinatrthidiff:~ Hadoop$ stop-all.sh
+stopping jobtracker
+localhost: stopping tasktracker
+stopping namenode
+localhost: stopping datanode
+localhost: stopping secondarynamenode
+\end{verbatim}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "CompteRendu"
+%%% End: 
