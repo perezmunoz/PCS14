@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2014.2.13)  14 JUN 2014 20:39
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2014.2.13)  14 JUN 2014 23:02
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -891,25 +891,18 @@ File: images/connexion_supelec.png Graphic file (type png)
 
 <use images/connexion_supelec.png>
 Package pdftex.def Info: images/connexion_supelec.png used on input line 26.
-(pdftex.def)             Requested size: 398.33858pt x 170.3087pt.
+(pdftex.def)             Requested size: 455.24408pt x 194.64185pt.
+
+Overfull \hbox (2.27618pt too wide) in paragraph at lines 26--27
+ [][] 
+ []
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-) [19
-
-
- <./images/yarn.png>] [20 <./images/connexion_supelec.png>]
-\openout2 = `parties_exemples.aux'.
-
-
-(./parties_exemples.tex
-
-Package xcolor Warning: Incompatible color definition on input line 9.
-
 \openout3 = `CompteRendu.pyg'.
 
-runsystem(pygmentize -l java -f latex -F tokenmerge      -P mathescape      -P 
+runsystem(pygmentize -l bash -f latex -F tokenmerge      -P mathescape      -P 
 linenos -P "verboptions= ,frame=single" -o CompteRendu.out.pyg CompteRendu.pyg)
 ...executed.
 
@@ -921,7 +914,214 @@ runsystem(rm CompteRendu.out.pyg)...executed.
 
 runsystem(rm CompteRendu.pyg)...executed.
 
- [21
+ [19
+
+
+ <./images/yarn.png>]
+\openout3 = `CompteRendu.pyg'.
+
+runsystem(pygmentize -l bash -f latex -F tokenmerge      -P mathescape      -P 
+linenos -P "verboptions= ,frame=single" -o CompteRendu.out.pyg CompteRendu.pyg)
+...executed.
+
+ (./CompteRendu.out.pyg)
+runsystem(rm CompteRendu.out.pyg)...executed.
+
+runsystem(rm CompteRendu.pyg)...executed.
+
+\openout3 = `CompteRendu.pyg'.
+
+runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
+= " -o CompteRendu.out.pyg CompteRendu.pyg)...executed.
+
+
+(./CompteRendu.out.pyg)
+runsystem(rm CompteRendu.out.pyg)...executed.
+
+runsystem(rm CompteRendu.pyg)...executed.
+
+\openout3 = `CompteRendu.pyg'.
+
+runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
+= " -o CompteRendu.out.pyg CompteRendu.pyg)...executed.
+
+ (./CompteRendu.out.pyg)
+runsystem(rm CompteRendu.out.pyg)...executed.
+
+runsystem(rm CompteRendu.pyg)...executed.
+
+\openout3 = `CompteRendu.pyg'.
+
+runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
+= " -o CompteRendu.out.pyg CompteRendu.pyg)...executed.
+
+ (./CompteRendu.out.pyg)
+runsystem(rm CompteRendu.out.pyg)...executed.
+
+runsystem(rm CompteRendu.pyg)...executed.
+
+
+Overfull \hbox (28.56451pt too wide) in paragraph at lines 75--75
+[]\T1/cmtt/m/n/12 Enter file in which to save the key (/home/alexandre/.ssh/id_
+rsa): id_rsa_test[] 
+ []
+
+[20 <./images/connexion_supelec.png>]
+! Missing $ inserted.
+<inserted text> 
+                $
+l.116 ...ns le fichier \texttt{~/.ssh/known_hosts}
+                                                  ).
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Extra }, or forgotten $.
+<recently read> \egroup 
+                        
+l.116 ...ns le fichier \texttt{~/.ssh/known_hosts}
+                                                  ).
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.117 
+      
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+) [21]
+\openout2 = `parties_exemples.aux'.
+
+ (./parties_exemples.tex
+
+LaTeX Font Warning: Font shape `T1/cmtt/bx/sc' undefined
+(Font)              using `T1/cmtt/bx/n' instead on input line 1.
+
+LaTeX Font Info:    Font shape `T1/cmtt/bx/sc' in size <20.74> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 1.
+
+Overfull \hbox (15.32187pt too wide) in paragraph at lines 3--4
+[]\T1/cmtt/m/n/12 La configuration Hadoop fournit des exemples plus ou moins co
+mplexes dans
+ []
+
+
+Overfull \hbox (59.43198pt too wide) in paragraph at lines 3--4
+\T1/cmtt/m/n/12 le but de se familiariser avec cet environnement. A titre d'exe
+mple, dans l'archive
+ []
+
+
+Overfull \hbox (10.04404pt too wide) in paragraph at lines 3--4
+\T1/cmtt/m/n/12 hadoop-examples-1.2.1.jar nous retrouvons l'algorithme MapReduc
+e permettant
+ []
+
+
+Overfull \hbox (10.96632pt too wide) in paragraph at lines 3--4
+\T1/cmtt/m/n/12 d'estimer la valeur de $\OML/cmm/m/it/12 ^^Y$\T1/cmtt/m/n/12 . 
+Afin de mieux comprendre le patron d'architecture
+ []
+
+LaTeX Font Info:    Font shape `T1/cmtt/bx/sc' in size <12> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 5.
+LaTeX Font Info:    Font shape `T1/cmtt/bx/sc' in size <14.4> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 5.
+
+Overfull \hbox (2.97488pt too wide) in paragraph at lines 7--8
+[]\T1/cmtt/m/n/12 Dans le cadre de l'électif STAGVOD (\T1/cmtt/m/it/12 Stockage
+ et accès à de gros volumes
+ []
+
+
+Overfull \hbox (12.12686pt too wide) in paragraph at lines 7--8
+\T1/cmtt/m/it/12 de données\T1/cmtt/m/n/12 ) nous avons été une première fois i
+nitiés à Hadoop. L'enseignant
+ []
+
+
+Overfull \hbox (53.25848pt too wide) in paragraph at lines 7--8
+\T1/cmtt/m/n/12 s'est particulièrement intéressé à l'algorithme MapReduce perme
+ttant de multiplier
+ []
+
+
+Overfull \hbox (16.21753pt too wide) in paragraph at lines 7--8
+\T1/cmtt/m/n/12 deux matrices qui est un très bon exemple de compréhension du f
+onctionnement
+ []
+
+
+Overfull \hbox (49.16782pt too wide) in paragraph at lines 7--8
+\T1/cmtt/m/n/12 des méthodes \T1/cmtt/m/it/12 map \T1/cmtt/m/n/12 et \T1/cmtt/m
+/it/12 reduce\T1/cmtt/m/n/12 . Vous trouverez en annexe le fichier Mm.java cont
+enant
+ []
+
+
+Package xcolor Warning: Incompatible color definition on input line 9.
+
+LaTeX Font Info:    Font shape `T1/cmtt/bx/it' in size <12> not available
+(Font)              Font shape `T1/cmtt/m/it' tried instead on input line 9.
+
+Overfull \hbox (11.2312pt too wide) in paragraph at lines 11--12
+[]\T1/cmtt/m/it/12 map \T1/cmtt/m/n/12 prend comme entrée un fichier contenant 
+les matrices. Compte tenu de
+ []
+
+
+Overfull \hbox (16.21753pt too wide) in paragraph at lines 11--12
+\T1/cmtt/m/n/12 l'implémentation de l'algorithme, il est indispensable que fich
+ier en entrée
+ []
+
+\openout3 = `CompteRendu.pyg'.
+
+runsystem(pygmentize -l java -f latex -F tokenmerge      -P mathescape      -P 
+linenos -P "verboptions= ,frame=single" -o CompteRendu.out.pyg CompteRendu.pyg)
+...executed.
+
+(./CompteRendu.out.pyg)
+runsystem(rm CompteRendu.out.pyg)...executed.
+
+runsystem(rm CompteRendu.pyg)...executed.
+
+
+Overfull \hbox (27.66885pt too wide) in paragraph at lines 38--39
+[]\T1/cmtt/m/n/12 Tout d'abord il est essentiel d'initialiser la configuration 
+où le contexte
+ []
+
+
+Overfull \hbox (34.738pt too wide) in paragraph at lines 38--39
+\T1/cmtt/m/n/12 viendra puiser ses données en précisant la taille des matrices.
+ Par conséquent,
+ []
+
+
+Overfull \hbox (3.87054pt too wide) in paragraph at lines 38--39
+\T1/cmtt/m/n/12 à chaque changement de matrices, il faudra à nouveau définir la
+ taille des
+ []
+
+
+Overfull \hbox (9.14838pt too wide) in paragraph at lines 40--41
+[]\T1/cmtt/m/n/12 Le reste de la fonction définit les chemins vers les fichiers
+ .class des
+ []
+
+
+Overfull \hbox (12.12686pt too wide) in paragraph at lines 40--41
+\T1/cmtt/m/n/12 fonctions \T1/cmtt/m/it/12 map \T1/cmtt/m/n/12 et \T1/cmtt/m/it
+/12 reduce\T1/cmtt/m/n/12 , les formats de la paire (clé, valeur) ainsi que le
+ []
+
+[22
 
 
 ]
@@ -929,8 +1129,80 @@ runsystem(rm CompteRendu.pyg)...executed.
 Package xcolor Warning: Incompatible color definition on input line 42.
 
 
+Overfull \hbox (17.4047pt too wide) in paragraph at lines 44--56
+[]\T1/cmtt/m/n/12 Le fichier texte en entrée sera d'abord traité par cette fonc
+tion. \T1/cmtt/m/it/12 map \T1/cmtt/m/n/12 le
+ []
+
+
+Overfull \hbox (3.87054pt too wide) in paragraph at lines 44--56
+\T1/cmtt/m/n/12 lit ligne par ligne le fichier et pour chaque ligne s'exécute u
+ne fois. Ce
+ []
+
+
+Overfull \hbox (22.39102pt too wide) in paragraph at lines 44--56
+\T1/cmtt/m/n/12 fichier est dans un premier temps splitté au caractère ":" et l
+a lettre A est
+ []
+
+
+Overfull \hbox (28.56451pt too wide) in paragraph at lines 44--56
+\T1/cmtt/m/n/12 stockée dans matStruc[0] et les coefficients de cette matrice d
+ans matStrut[1]
+ []
+
+
+Overfull \hbox (34.738pt too wide) in paragraph at lines 44--56
+\T1/cmtt/m/n/12 (valable pour B aussi). A partir de là, un nouveau tableau, mat
+Lines, contenant
+ []
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 44--56
 
+ []
+
+
+Overfull \hbox (2.97488pt too wide) in paragraph at lines 57--58
+[]\T1/cmtt/m/n/12 Selon que ce soit la matrice A ou B, un traitement différent 
+est opéré.
+ []
+
+
+Overfull \hbox (10.04404pt too wide) in paragraph at lines 57--58
+\T1/cmtt/m/n/12 En effet, dans le produit de matrices C=A*B, les coefficients d
+e A et B mis
+ []
+
+
+Overfull \hbox (10.04404pt too wide) in paragraph at lines 57--58
+\T1/cmtt/m/n/12 en jeu dans le calcul du coefficient (i,j) de C ne sont pas les
+ mêmes. D'où
+ []
+
+
+Overfull \hbox (15.32187pt too wide) in paragraph at lines 59--60
+[]\T1/cmtt/m/n/12 Que ce soit pour A ou B, les tableaux à double entrée créés a
+u début sont
+ []
+
+
+Overfull \hbox (47.08499pt too wide) in paragraph at lines 59--60
+\T1/cmtt/m/n/12 remplis avec la valeur des coefficients des matrices correspond
+antes. (A[0][0]=0,
+ []
+
+
+Overfull \hbox (47.08499pt too wide) in paragraph at lines 59--60
+\T1/cmtt/m/n/12 A[0][1]=1, etc...). Le reste du code se charge de créer les pai
+res (clé, valeur).
+ []
+
+
+Overfull \hbox (10.04404pt too wide) in paragraph at lines 59--60
+\T1/cmtt/m/n/12 La clé correspond au coefficient de la matrice C. La valeur cor
+respond à un
  []
 
 
@@ -1015,9 +1287,57 @@ Underfull \hbox (badness 10000) in paragraph at lines 63--68
  []
 
 
+Overfull \hbox (33.84235pt too wide) in paragraph at lines 69--70
+[]\T1/cmtt/m/n/12 Le fichier mm_mapreduce_explication.txt contient l'ensemble d
+es paires (clé,
+ []
+
+
 Package xcolor Warning: Incompatible color definition on input line 71.
 
-[22]
+
+Overfull \hbox (2.97488pt too wide) in paragraph at lines 73--74
+[]\T1/cmtt/m/n/12 "mapper" les matrices revient à parser les coefficients des m
+atrices en
+ []
+
+
+Overfull \hbox (3.87054pt too wide) in paragraph at lines 73--74
+\T1/cmtt/m/n/12 leur faisant correspondre le coefficient de C dans lequel il es
+t impliqué.
+ []
+
+
+Overfull \hbox (34.738pt too wide) in paragraph at lines 73--74
+\T1/cmtt/m/n/12 A ce stade, l'ensemble des paires (clé, valeur) nécessaires à l
+a multiplication
+ []
+
+
+Overfull \hbox (23.57819pt too wide) in paragraph at lines 75--76
+[]\T1/cmtt/m/n/12 Le rôle de la fonction \T1/cmtt/m/it/12 reduce \T1/cmtt/m/n/1
+2 est d'isoler la bonne ligne de A et la bonne
+ []
+
+
+Overfull \hbox (22.39102pt too wide) in paragraph at lines 75--76
+\T1/cmtt/m/n/12 colonne de B auxquelles ont assigne la bonne clé. Elle va ainsi
+ récupérer par
+ []
+
+
+Overfull \hbox (65.60547pt too wide) in paragraph at lines 75--76
+\T1/cmtt/m/n/12 clé les lots de deux vecteurs (celui associé à A et celui assoc
+ié à B) correspondant
+ []
+
+
+Overfull \hbox (22.39102pt too wide) in paragraph at lines 75--76
+\T1/cmtt/m/n/12 à un élément scalaire de la matrice finale, puis multiplier deu
+x à deux leurs
+ []
+
+[23]
 Underfull \hbox (badness 10000) in paragraph at lines 77--78
 
  []
@@ -1109,10 +1429,22 @@ l.87
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-) [23]
+
+Overfull \hbox (2.97488pt too wide) in paragraph at lines 86--87
+[]\T1/cmtt/m/n/12 Hadoop n'est pas du tout adapté au multiplication de matrices
+. Ceci est
+ []
+
+
+Overfull \hbox (28.56451pt too wide) in paragraph at lines 86--87
+\T1/cmtt/m/n/12 un exemple dans le but unique de comprendre l'algorithme MapRed
+uce. Le fichier
+ []
+
+) [24]
 \openout2 = `partie_conclusion.aux'.
 
- (./partie_conclusion.tex) [24
+ (./partie_conclusion.tex) [25
 
 
 ] (./CompteRendu.aux (./page_garde.aux)
@@ -1121,36 +1453,41 @@ you left one out. Proceed, with fingers crossed.
 (./partie_installation.aux) (./partie_installation2.2.aux)
 (./parties_exemples.aux) (./partie_conclusion.aux))
 
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
- ) 
+ )
+(\end occurred inside a group at level 1)
+
+### simple group (level 1) entered at line 116 ({)
+### bottom level 
 Here is how much of TeX's memory you used:
- 6538 strings out of 494993
- 90493 string characters out of 3180573
- 170703 words of memory out of 3000000
- 9515 multiletter control sequences out of 15000+200000
- 17565 words of font info for 46 fonts, out of 3000000 for 9000
+ 6561 strings out of 494993
+ 90874 string characters out of 3180573
+ 170704 words of memory out of 3000000
+ 9526 multiletter control sequences out of 15000+200000
+ 17808 words of font info for 48 fonts, out of 3000000 for 9000
  36 hyphenation exceptions out of 8191
- 48i,7n,44p,1034b,323s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/font
-s/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
-8.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbi1200.pfb></usr/sha
-re/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf-dist/f
-onts/type1/public/cm-super/sfcc1200.pfb></usr/share/texmf-dist/fonts/type1/publ
-ic/cm-super/sfcc2074.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfi
-t1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb></usr
-/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf-di
-st/fonts/type1/public/cm-super/sfrm1728.pfb></usr/share/texmf-dist/fonts/type1/
-public/cm-super/sfrm2074.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super
-/sfti1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb><
-/usr/share/texmf-dist/fonts/type1/public/cm-super/sfxc1440.pfb></usr/share/texm
-f-dist/fonts/type1/public/cm-super/sfxc2074.pfb>
-Output written on CompteRendu.pdf (24 pages, 424936 bytes).
+ 48i,7n,44p,1034b,342s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc
+}</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1200
+.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb></usr/shar
+e/texmf-dist/fonts/type1/public/cm-super/sfcc2074.pfb></usr/share/texmf-dist/fo
+nts/type1/public/cm-super/sfit1200.pfb></usr/share/texmf-dist/fonts/type1/publi
+c/cm-super/sfrm0600.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm
+1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/
+share/texmf-dist/fonts/type1/public/cm-super/sfrm2074.pfb></usr/share/texmf-dis
+t/fonts/type1/public/cm-super/sfti1200.pfb></usr/share/texmf-dist/fonts/type1/p
+ublic/cm-super/sftt1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/
+sftt1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt2074.pfb></
+usr/share/texmf-dist/fonts/type1/public/cm-super/sfxc1440.pfb></usr/share/texmf
+-dist/fonts/type1/public/cm-super/sfxc2074.pfb>
+Output written on CompteRendu.pdf (25 pages, 454290 bytes).
 PDF statistics:
- 154 PDF objects out of 1000 (max. 8388607)
- 106 compressed objects within 2 object streams
+ 162 PDF objects out of 1000 (max. 8388607)
+ 112 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
