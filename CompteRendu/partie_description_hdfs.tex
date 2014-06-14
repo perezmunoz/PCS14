@@ -1,0 +1,80 @@
+\section{Hadoop Distritubted File System}
+
+\par HDFS pour \textit{Hadoop Distributed File System} est le système de fichiers propre à Hadoop. C'est le composant en charge du stockage des données dans un cluster Hadoop.
+
+\subsection{Introduction}
+\label{sec:introduction}
+
+\par HDFS est un système de fichiers distribué, c'est-à-dire que contrairement à un système de fichiers local, il permet de stocker des fichiers de manière répartie sur plusieurs machines physiques. Du point de vue de l'utilisateur, l'ensemble des machines physiques n'est visible que sous la forme d'un espace de stockage géant. 
+
+\begin{quote}
+  A distributed system is a collection of independent computers that appear to the users of the system as a single computer.
+\end{quote}
+
+\begin{flushright}
+  Distributed Operating System. A. Tanenbaum, Prentice 
+  Hall, 1994
+\end{flushright}
+
+\par Comparé aux autres systèmes de fichiers distribués, il partage beaucoup de points communs, mais présente toutefois des différences majeures, non négligeables.
+
+\par HDFS est prévu pour du ``commodity hardware'', c'est-à-dire du matériel de grande distribution. Sa haute tolérance aux pannes lui permet de gérer du matériel ``low cost'', peu fiable, d'où sa popularité actuelle.
+
+\par Pour finir cet aperçu, il est bon de noter que la réplication de données à travers les machines physiques rend l'accès aux données rapide, en plus de rendre le stockage résistant aux pannes.   
+
+\subsection{Hypothèses de fonctionnement}
+\label{sec:hypoth-de-fonct}
+
+\subsubsection{Panne de matériel}
+\label{sec:panne-de-materiel}
+
+\par HDFS considère les pannes comme des événements qui peuvent se produire à tout moment. En effet, imaginons un cluster de mille noeuds ``low cost'', il paraît tout à fait concevable  qu'une machine tombe en panne (ou même plus). Cette supposition rend HDFS très résistant à ces pannes, et les mécanismes de réaction sont très rapides. La détection et l'adaptation rapides de ces pannes est un des principaux atouts de HDFS.
+
+\subsubsection{Vitesse d'accès, gros volumes de données}
+\label{sec:vitesse-dacces-aux}
+
+\par Un système de fichiers classique est censé s'adapter à une utilisation moyenne. Ainsi, un exemple comme ext2 s'adapte à une taille de fichier moyenne inférieure à 3ko. Cela est un bon compromis en termes de rapidité d'accès moyenne et d'espace gaspillé par les clusters pas entièrement remplis. D'autre part, un ensemble de fonctionnalités permet de répondre à une demande hétérogène (POSIX).  Mais HDFS est prévu pour de grosses quantités de données (Big Data...), il serait ainsi ridicule de rechercher une grande performance de calcul, si elle est de toute façon limitée par la vitesse de lecture des données. C'est pour cela que HDFS déplace le compromis vers un point plus adapté, et permet ainsi une vitesse d'accès très élevée. Certaines fonctionnalités de systèmes de fichiers traditionnels ont été omises, du fait de leur inutilité pour ce cas d'utilisation précis, rendant HDFS encore plus performant dans son domaine.
+
+\subsubsection{Modèle de cohérence simple}
+\label{sec:modele-de-coherence}
+
+\par Comme dit dans le paragraphe précédent, on recherche les cas d'utilisation de HDFS et on supprime toutes les fonctionnalités habituelles inutiles dans ce cas afin d'accéder à une plus grande performance. Une autre adaptation est donc celle du cycle de vie d'un fichier. Sur HDFS, on va créer un fichier (Write), puis y accéder massivement (Read), puis le fermer, mais on ne le modifiera jamais... Cette hypothèse simplifie beaucoup le problème de la cohérence des données, et rend l'accès encore plus rapide. Cela est donc particulièrement adapté aux applications MapReduce.
+\par Un projet de fonctionnalité permettant d'ajouter des données en fin de fichier est en cours.
+
+\subsubsection{``Moving Computation is Cheaper than Moving Data''}
+\label{sec:moving-comp-cheap}
+
+\par HDFS répond à un besoin classique du calcul distribué. Il s'agit simplement de dire qu'il est plus rapide d'effectuer un calcul sur les données là où elles sont stockées, et non de les déplacer. Cela permet de ne pas encombrer le réseau, et aussi de gagner en rapidité. HDFS met donc à disposition des interfaces pour déplacer les applications sur les noeuds qui contiennent les données (typiquement la fonction Map).
+
+\subsubsection{Portabilité}
+\label{sec:portabilite}
+
+\par HDFS est prévu pour être installé sur une gamme très large de machines différentes
+
+
+\par Alex je te laisse le soin de détailler HDFS...
+
+\subsection{Fonctionnement}
+
+\par Le fonctionnement de HDFS s'appuie sur plusieurs démons :
+
+\begin{itemize}
+\item le NameNode (NN) : c'est le noeud maître disposant d'une machine dédiée;
+\item le SecondaryNameNode (SNN) : tout comme le NN c'est aussi un noeud maître disposant d'une machine dédiée. Ce noeud vient comme son nom l'indique seconder le NN en cas de panne majeure afin de ne pas perdre l'arborescense des données stockées dans le HDFS;
+\item le DataNode (DN) : c'est un noeud esclave contenant les données du HDFS et implanté sur chaque machine du cluster.
+\end{itemize}
+
+\par A titre d'exemple, dans un cluster de 50 machines, vous trouverez trois noeuds maîtres correspondant au NameNode, SecondaryNameNode et JobTracker (confère partie suivante sur MapReduce). Il ne reste plus que 47 noeuds esclaves contenant chacun une copie du DataNode et du TaskTracker (confère partie suivante sur MapReduce). Détaillons les noeuds maîtres.
+
+\subsubsection{Le NameNode}
+
+\par à compléter
+
+\subsubsection{Le SecondaryNameNode}
+
+\par à compléter
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "CompteRendu"
+%%% End: 

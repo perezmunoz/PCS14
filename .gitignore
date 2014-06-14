@@ -1,0 +1,15 @@
+*.aux
+CompteRendu/auto
+CompteRendu/*.pdf
+*.log
+*.idx
+.#*
+*.toc
+*.synctex.gz
+*.fmt
+*_.tex
+*.class
+GPATH
+GRTAGS
+GTAGS
+*#
