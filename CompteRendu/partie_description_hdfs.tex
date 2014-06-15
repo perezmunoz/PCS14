@@ -1,5 +1,5 @@
 \section{Hadoop Distritubted File System}
-
+\label{sec:hdfs}
 \par HDFS pour \textit{Hadoop Distributed File System} est le système de fichiers propre à Hadoop. C'est le composant en charge du stockage des données dans un cluster Hadoop.
 
 \subsection{Introduction}
@@ -8,7 +8,7 @@
 \par HDFS est un système de fichiers distribué, c'est-à-dire que contrairement à un système de fichiers local, il permet de stocker des fichiers de manière répartie sur plusieurs machines physiques. Du point de vue de l'utilisateur, l'ensemble des machines physiques n'est visible que sous la forme d'un espace de stockage géant. 
 
 \begin{quote}
-  A distributed system is a collection of independent computers that appear to the users of the system as a single computer.
+  \emph{A distributed system is a collection of independent computers that appear to the users of the system as a single computer.}
 \end{quote}
 
 \begin{flushright}
@@ -51,28 +51,90 @@
 
 \par HDFS est prévu pour être installé sur une gamme très large de machines différentes
 
+\subsection{Les démons HDFS}
 
-\par Alex je te laisse le soin de détailler HDFS...
-
-\subsection{Fonctionnement}
-
-\par Le fonctionnement de HDFS s'appuie sur plusieurs démons :
-
-\begin{itemize}
-\item le NameNode (NN) : c'est le noeud maître disposant d'une machine dédiée;
-\item le SecondaryNameNode (SNN) : tout comme le NN c'est aussi un noeud maître disposant d'une machine dédiée. Ce noeud vient comme son nom l'indique seconder le NN en cas de panne majeure afin de ne pas perdre l'arborescense des données stockées dans le HDFS;
-\item le DataNode (DN) : c'est un noeud esclave contenant les données du HDFS et implanté sur chaque machine du cluster.
-\end{itemize}
-
-\par A titre d'exemple, dans un cluster de 50 machines, vous trouverez trois noeuds maîtres correspondant au NameNode, SecondaryNameNode et JobTracker (confère partie suivante sur MapReduce). Il ne reste plus que 47 noeuds esclaves contenant chacun une copie du DataNode et du TaskTracker (confère partie suivante sur MapReduce). Détaillons les noeuds maîtres.
+\par Le fonctionnement de HDFS est assuré par trois types de démons.
 
 \subsubsection{Le NameNode}
 
-\par à compléter
+\par Le NameNode (NN) est un noeud maître disposant d'une machine dédiée. En effet, le NN est un \textit{SPOF} (\textit{Single Point Of Failure}). De ce fait, une panne du NN entraîne inéluctablement la panne de tout le cluster dans la mesure où seul le NN possède la cartographie des données. La seule façon de parer à une défaillance est de lui affecter une machine à haute tolérance aux pannes et d'avoir une machine "mirroir" prête à démarrer en cas de défaillance.
 
-\subsubsection{Le SecondaryNameNode}
+\par Il héberge les métadonnées HDFS permettant ainsi de :
 
-\par à compléter
+\smallskip
+
+\begin{itemize}
+\item faire la correspondance entre un fichier et les blocs le constituant;
+\item localiser les blocs au sein du cluster, c'est-à-dire de de faire le correspondance blocs/DataNode;
+\item donner les informations relatives au propriétaire et autorisations des fichiers.
+\end{itemize}
+
+\smallskip
+
+\par De ce fait, les métadonnées des blocs sont stockées sur disque dur (fichier \texttt{fsimage}) et chargées dans la mémoire vive du NN lors du démarrage du cluster. Les modifications intervenant dans le cluster sont répercutées immédiatement dans la mémoire vive du NN et enregistrées dans un journal (fichier \texttt{edits}) stocké sur disque dur.
+
+\par La construction de la cartographie de la localisation des blocs dans le cluster est réalisée par les échanges d'informations qui ont lieu à chaque démarrage entre les DNs et le NN. Les DNs envoient ainsi au NN les métadonnées des blocs qu'il contient.
+
+\subsubsection{Le SecondaryNameNode} 
+
+\par De la même manière, le SecondaryNameNode (SNN) est aussi un noeud maître disposant de sa propre machine dédiée. Contrairement à ce que l'on pourrait penser, le SNN n'est pas une copie de secours (\textit{backup}) du NN. Au contraire, il effectue les tâches de maintenance pour le compte du NN. Il consolide à intervalle régulier les modifications enregistrées dans le journal (fichier \texttt{edits}), et les reporte dans le fichier \texttt{fsimage} du NN. Ceci permet en outre de :
+
+\begin{itemize}
+\item garder sous contrôle l'espace disque utilisé par le journal;
+\item limiter la charge processeur du NN;
+\item réduire le temps de démarrage du NN, en limitant la taille du journal à "rejouer" au démarrage.
+\end{itemize}
+
+\par Il intervient lorsque le fichier \texttt{edits} atteint une taille prédéfinie ou à intervalle régulier. Le paramétrage de ce dernier est laissé à l'utilisateur Hadoop.
+
+\subsubsection{Le DataNode}
+
+\par Le DataNode (DN) est un noeud esclave implanté sur chaque machine du cluster. Dans celui-ci sont stockés les données des fichiers sous forme de blocs. Il peut contenir des blocs de différents fichiers.
+
+\par Pour illustrer la répartition des démons au sein des machines, prenons pour exemple le cluster Skynet de Supélec qui contient 17 noeuds (\textit{sh00} à \textit{sh16}). Dans celui-ci vous trouverez trois noeuds maîtres correspondant au NameNode, SecondaryNameNode et JobTracker (version 1 de Hadoop) ou ResourceManager (version 2 Hadoop). Il ne reste plus que 14 noeuds esclaves contenant chacun un DataNode et un TaskTracker (version 1 Hadoop) ou NodeManager (version 2 Hadoop).
+
+\subsection{Lecture/Création d'un fichier HDFS par un programme Hadoop}
+
+\par Afin de comprendre HDFS, il est essentiel de s'intéresser aux étapes mises en oeuvres afin de lire ou écrire un fichier sur HDFS. Pour information, les fonctions de gestion de fichiers sont issues du package Java \texttt{org.apache.hadoop}.
+
+\paragraph{Lecture d'un fichier HDFS par un programme Hadoop (Figure \ref{fig:lecture-hdfs}).}La demande d'ouverture du fichier HDFS par le programme Hadoop se fait via la fonction \texttt{open()}. HDFS se charge d'envoyer au NameNode la localisation des premiers blocs constituant le fichier par le biais d'un appel \textit{RPC} (\textit{Remote Procedure Call}). Le NameNode vérifie ensuite que le programme dispose des droits suffisants pour lire le fichier.Si les droits sont suffisant alors le NameNode renvoie à HDFS le nombre d'adresses pour chaque bloc correspondant au facteur de réplication des blocs qui sont triées selon leur proximité par rapport à la JVM dans laquelle s'exécute le programme. En effet, au sein de chaque noeud une JVM est lancée à l'exécution d'un job chargée de d'exécuter les ordres du TaskTracker (Hadoop 1.x) ou du NodeManager (Hadoop 2.x). 
+
+\par Le programme accède ensuite au fichier en lecture via l'instruction \texttt{read()} après que HDFS lui ait renvoyé une instance du type \texttt{FSDataInputStream} afin d'établir la connexion avec le DataNode en question. Une fois la totalité du bloc lu, HDFS met fin à la connexion avec le DataNode concerné et en ouvre une nouvelle avec le bloc suivant. Il est important de remarquer que les blocs d'un même fichier peuvent se trouver sur des DataNodes différents.
+
+\par En cas d'erreur de lecture, HDFS ferme la connexion avec le DataNode défaillant et en ouvre une autre avec le DataNode contenant le bloc le plus proche du dernier. Une fois que l'intégralité du fichier est lu, le programme Hadoop envoie l'instruction \texttt{close()} à \texttt{FSDataInputStream}, ce qui coupe le \textit{stream} de lecture du fichier.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=16cm]{images/reading_file.png}
+  \caption{Lecture d'un fichier HDFS par un programme Hadoop}
+  \label{fig:lecture-hdfs}
+\end{figure}
+
+\paragraph{Création d'un fichier HDFS par un programme Hadoop ()Figure \ref{fig:ecriture-hdfs}).} Lors de la création d'un fichier, le programme Hadoop fait une demande à HDFS par le biais de l'instruction \texttt{create()}. HDFS transmet la demande de création au NameNode avec un appel de type \textit{RPC}. Ce dernier s'assure que le fichier n'a pas déjà été créé et que le programme dispose des droits suffisants pour sa création. Si tel est le cas, le NameNode intègre le nouveau fichier dans sa cartographie des données du cluster et tout comme dans le cas d'une lecture, HDFS envoie une instance de type \texttt{FSDataOutputStream} au programme, ce qui lui permet d'accéder au fichier en écriture.
+
+\par Les modifications en écriture du fichier sont envoyés à HDFS sous forme de \textit{packets} et stockés temporairement dans une file d'attente (\textit{data queue}), prise en charge par une instance \texttt{DataStreamer}. Cette dernière demande au NameNode les adresses de deux blocs (nombre de réplication par défaut : 2) sur deux DataNodes différents afin d'y stocker les données en file d'attente. Un accusé de réception du paquet (\textit{packet acknowledged}) stocké avec succès est envoyé à l'instance \texttt{FDDataOutputStream}. A la fin de cette opération, l'instance \texttt{DataStreamer} demande à nouveau deux nouvelles adresses au NameNode. L'opération se répète jusqu'à ce que tous les blocs d'un même fichier aient été stockés convenablement.
+
+\par En cas d'erreur d'écriture au niveau d'un DataNode, HDFS est en mesure de détecter cela car un accusé de réception pour un certain paquet ne lui sera pas parvenu. Pour pallier à ce problème, HDFS dispose de mécanismes permettat de rétablir une situation normale, c'est-à-dire l'affection d'un bloc de remplacement dans le cluster et la réécriture de tous les paquets susceptibles d'être affectés par le problème d'écriture dans ce nouveau bloc.
+
+\par Enfin, lorsque le dernier paquet est écrit avec succès sur les deux DataNodes différents, le programme Hadoop envoie l'instruction \texttt{close()} à l'instance \texttt{FSDataOutputStream}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=17cm]{images/writing_file.png}
+  \caption{\'{E}criture d'un fichier HDFS par un programme Hadoop}
+  \label{fig:ecriture-hdfs}
+\end{figure}
+
+\paragraph{Vue d'ensemble (Figure \ref{fig:archi-hdfs}).} Ci-dessous est donnée la vue d'ensemble de l'architecture du système de fichiers de Hadoop : HDFS. On y retrouve les opérations de lecture et écriture explicitées précédemment. Le NameNode est bien au c\oe{}ur même de cette architecture : c'est lui qui gère l'ensemble des métadonnées des blocs contenus dans les DataNodes.
+
+\par Cette vue met en lumière un autre aspect de Hadoop. Au sein de très gros clusters pouvant être organisés dans des \textit{racks} différents, pour plus de sécurité Hadoop va tâcher de répliquer les données dans des \textit{racks} différents. En effet, la politique de tolérance zéro aux pannes implique que dans le cas où un \textit{rack} entier tombe en panne, il soit possible de récupérer les données dans un autre \textit{rack}. Ainsi, Hadoop évite de répliquer les données au sein des DataNodes d'un même \textit{rack}.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=16cm]{images/hadoop_arch.png}
+  \caption{Architecture HDFS}
+  \label{fig:archi-hdfs}
+\end{figure}
 
 %%% Local Variables: 
 %%% mode: latex

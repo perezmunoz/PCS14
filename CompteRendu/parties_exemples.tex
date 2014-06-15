@@ -3,6 +3,7 @@
 \par La configuration Hadoop fournit des exemples plus ou moins complexes dans le but de se familiariser avec cet environnement. A titre d'exemple, dans l'archive hadoop-examples-1.2.1.jar nous retrouvons l'algorithme MapReduce permettant d'estimer la valeur de $\pi$. Afin de mieux comprendre le patron d'architecture MapReduce traitons un cas concret de multiplication de matrices.
 
 \subsection{Multiplication de matrices}
+\label{sec:matmult}
 
 \par Dans le cadre de l'électif STAGVOD (\textit{Stockage et accès à de gros volumes de données}) nous avons été une première fois initiés à Hadoop. L'enseignant s'est particulièrement intéressé à l'algorithme MapReduce permettant de multiplier deux matrices qui est un très bon exemple de compréhension du fonctionnement des méthodes \textit{map} et \textit{reduce}. Vous trouverez en annexe le fichier Mm.java contenant l'implémentation des fonctions.
 
@@ -56,15 +57,16 @@ matLines[4]=[12 13 14\\
 
 \par Selon que ce soit la matrice A ou B, un traitement différent est opéré. En effet, dans le produit de matrices C=A*B, les coefficients de A et B mis en jeu dans le calcul du coefficient (i,j) de C ne sont pas les mêmes. D'où cette distinction.
 
-\par Que ce soit pour A ou B, les tableaux à double entrée créés au début sont remplis avec la valeur des coefficients des matrices correspondantes. (A[0][0]=0, A[0][1]=1, etc...). Le reste du code se charge de créer les paires (clé, valeur). La clé correspond au coefficient de la matrice C. La valeur correspond à un des coefficients mis en jeu dans le produit matriciel.\\ 
+\par Que ce soit pour A ou B, les tableaux à double entrée créés au début sont remplis avec la valeur des coefficients des matrices correspondantes. (A[0][0]=0, A[0][1]=1, etc...). Le reste du code se charge de créer les paires (clé, valeur). La clé correspond au coefficient de la matrice C. La valeur correspond à un des coefficients mis en jeu dans le produit matriciel.
 
-\par Pour exemple on a :\\
-
-(C_0_0, (A,0,A[0][0]))  (C_1_0, (A,0,A[1][0]))\\
-(C_0_0, (A,1,A[0][1]))	(C_0_0, (A,1,A[1][1]))\\
-(C_0_0, (A,2,A[0][2]))	(C_0_0, (A,2,A[1][2]))\\
-(C_0_0, (A,3,A[0][3]))	(C_0_0, (A,3,A[1][3]))\\
-(C_0_0, (A,4,A[0][4]))	(C_0_0, (A,4,A[1][4]))\\
+\par Pour exemple on a :
+\begin{verbatim}
+(C_0_0, (A,0,A[0][0]))  (C_1_0, (A,0,A[1][0]))
+(C_0_0, (A,1,A[0][1]))	(C_0_0, (A,1,A[1][1]))
+(C_0_0, (A,2,A[0][2]))	(C_0_0, (A,2,A[1][2]))
+(C_0_0, (A,3,A[0][3]))	(C_0_0, (A,3,A[1][3]))
+(C_0_0, (A,4,A[0][4]))	(C_0_0, (A,4,A[1][4]))
+\end{verbatim}
 
 \par Le fichier mm\_mapreduce\_explication.txt contient l'ensemble des paires (clé, valeur) des matrices A et B en sortie de la fonction \textit{map}.
 
@@ -74,16 +76,18 @@ matLines[4]=[12 13 14\\
 
 \par Le rôle de la fonction \textit{reduce} est d'isoler la bonne ligne de A et la bonne colonne de B auxquelles ont assigne la bonne clé. Elle va ainsi récupérer par clé les lots de deux vecteurs (celui associé à A et celui associé à B) correspondant à un élément scalaire de la matrice finale, puis multiplier deux à deux leurs éléments et les sommer.
 
-\par Par exemple pour C00 on a :\\
+\par Par exemple pour C00 on a :
 
+\begin{verbatim}
     (C_0_0, (A,0,A[0][0]))   x   (C_0_0, (B,0,B[0][0]))\\
  +  (C_0_0, (A,1,A[0][1]))   x   (C_0_0, (B,1,B[1][0]))\\
  +  (C_0_0, (A,2,A[0][2]))   x   (C_0_0, (B,2,B[2][0]))\\
  +  (C_0_0, (A,3,A[0][3]))   x   (C_0_0, (B,3,B[3][0]))\\
  +  (C_0_0, (A,4,A[0][4]))   x   (C_0_0, (B,4,B[4][0]))\\
  =	 C_0_0 final
+\end{verbatim}
 
-\par Hadoop n'est pas du tout adapté au multiplication de matrices. Ceci est un exemple dans le but unique de comprendre l'algorithme MapReduce. Le fichier de sortie obtenu se trouve en annexe sous le nom output_matmult.txt.
+\par Hadoop n'est pas du tout adapté au multiplication de matrices. Ceci est un exemple dans le but unique de comprendre l'algorithme MapReduce. Le fichier de sortie obtenu se trouve en annexe sous le nom output\_matmult.txt.
 
 %%% Local Variables: 
 %%% mode: latex
