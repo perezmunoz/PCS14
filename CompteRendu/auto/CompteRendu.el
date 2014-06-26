@@ -3,9 +3,12 @@
     (TeX-add-symbols
      "verbatiminput")
     (TeX-run-style-hooks
+     "xcolor"
      "verbatim"
      "minted"
      ""
+     "caption"
+     "justification=centering"
      "styles"
      "page_garde"
      "partie_introduction"

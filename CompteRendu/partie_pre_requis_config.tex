@@ -5,7 +5,7 @@
 \par Sortie le 1er août 2013, la version 1.2.1 de Hadoop est considérée stable. Ce document donne les étapes nécessaires à l'installation de ce framework Java. Installation et compréhension des concepts ne sont pas à porté de main. Ce guide ne prétend pas être exhaustif, le lecteur sera amené à chercher des informations par lui-même.
 
 \par Pour de plus amples renseignements sur cette version, rendez-vous sur :\\
-\textit{http://hadoop.apache.org/docs/r1.2.1/}
+\emph{http://hadoop.apache.org/docs/r1.2.1/}
 
 \subsection{Matériel utilisé}
 
@@ -13,37 +13,37 @@
 
 \subsection{Création d'un nouvel utilisateur}
 
-\par L'installation de Hadoop sur votre ordinateur est effectuée dans une première partie en mode \textit{Single Node}, autrement dit Hadoop ne déploiera ses calculs que sur votre machine, contrairement au mode \textit{Multi-Node Cluster} dans lequel plusieures machines sont agrégées dans le but d'augmenter la puissance de calcul.
+\par L'installation de Hadoop sur votre ordinateur est effectuée dans une première partie en mode \emph{Single Node}, autrement dit Hadoop ne déploiera ses calculs que sur votre machine, contrairement au mode \emph{Multi-Node Cluster} dans lequel plusieures machines sont agrégées dans le but d'augmenter la puissance de calcul.
 
 \par Configurer Hadoop fait appel à l'écriture sur des fichiers susceptibles, en cas de mauvaise utilisation, d'altérer le bon fonctionnement de votre machine. Il est par conséquent conseillé de créer un nouvel utilisateur. De ce fait, \texttt{hduser} fait référence tout au long de ce document à l'utilisateur dédié à Hadoop. Celle-ci devra posséder les droits administrateur.
 
 \subsection{Installation de Java}
 
-\par Une fois le nouvel utilisateur Hadoop créé, ouvrez la session. Hadoop nécessite une version de Java supérieure à la version 1.5 afin d'assurer son bon fonctionnement. 
+\par Une fois le nouvel utilisateur Hadoop créé, ouvrez la session. Hadoop nécessite une version de Java supérieure à la version \texttt{1.5} afin d'assurer son bon fonctionnement. 
 
 \par Pour connaître la version installée sur votre machine, ouvrez votre Terminal et tapez :
 
-\begin{minted}[frame=single,linenos,mathescape]{bash}
+\begin{minted}[frame=single,mathescape]{bash}
 ThiDiff:~ hduser$ java -version
 \end{minted}
 
 \par Ci-dessous vous pouvez constater que la version Java installée est la 1.7.
 
-\begin{minted}[frame=single,linenos,mathescape]{bash}
+\begin{minted}[frame=single,mathescape]{bash}
 java version "1.7.0_21"
 Java(TM) SE Runtime Environment (build 1.7.0_21-b12)
 Java HotSpot(TM) 64-Bit Server VM (build 23.21-b01, mixed mode)
 \end{minted}
 
-\par Dans le cas où une version de Java en-dessous de 1.5 est installée, rendez-vous sur \textit{http://www.java.com/fr} et suivez les instructions de téléchargement et d'installation.
+\par Dans le cas où une version de Java en-dessous de 1.5 est installée, rendez-vous sur \emph{http://www.java.com/fr} et suivez les instructions de téléchargement et d'installation.
 
 \subsection{Configuration du SSH}
 
-\par L'accès aux différents noeuds via Hadoop nécessite de configurer le SSH (\textit{Secure Shell}). Dans notre mode de fonctionnement, seule la configuration du \texttt{localhost} est nécessaire. La configuration du mode \textit{Multi-Node} est traitée dans la partie~\ref{sec:hadoop-2.2}.
+\par L'accès aux différents noeuds via Hadoop nécessite de configurer le SSH (\emph{Secure Shell}). Dans notre mode de fonctionnement, seule la configuration du \texttt{localhost} est nécessaire. La configuration du mode \emph{Multi-Node} est traitée dans la partie~\ref{sec:hadoop-2.2}.
 
 \par Pour ce faire, vous devez générer une clé SSH pour votre session \texttt{hduser}. Sur votre Terminal, tapez :
 
-\begin{minted}[frame=single,linenos,mathescape]{bash}
+\begin{minted}[frame=single,mathescape]{bash}
 ThiDiff:~ hduser$ ssh-keygen -t rsa -P ""
 Generating public/private rsa key pair.
 Enter file in which to save the key (/Users/hduser/.ssh/id_rsa) :
@@ -68,26 +68,25 @@ The key s randomart image is:
 
 \par Désormais nous devons autoriser l'accès SSH sur notre machine à l'aide de la clé RSA générée. Pour ce faire, vous devez autoriser cette clé en la plaçant dans le fichier \texttt{authorized\_keys} contenant la liste des clés autorisées. Pour cela :
 
-\begin{minted}[frame=single,linenos,mathescape]{bash}
-ThiDiff:~ hduser$ cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
+\begin{minted}[frame=single,mathescape]{bash}
+ThiDiff:~ hduser$ cat $HOME/.ssh/id_rsa.pub >>$HOME/.ssh/authorized_keys
 \end{minted}
 
 \par La connexion SSH sur votre machine est théoriquement possible. Pour rappel, votre machine est nomée \texttt{localhost}.
 
-\begin{minted}[frame=single,linenos,mathescape]{bash}
+\begin{minted}[frame=single,mathescape]{bash}
 ThiDiff:~ hduser$ ssh localhost
 The authenticity of host 'localhost (127.0.0.1)' cannot be established.
 RSA key fingerprint is 6c:8b:6f:43:42:ee:f3:27:ca:af:28:ea:51:08:a4:21.
 Are you sure you want to continue connecting (yes/no)? yes
 Warning: Permanently added 'localhost' (RSA) to the list of known hosts.
-Last login: Sat May 31 19:00:12 2014 from localhost
 \end{minted}
 
 \par Lors de votre première connexion, votre machine est enregistrée dans la liste des hôtes connus. Ainsi, à la prochaine connexion elle sera reconnue et la saisie du mot de passe de votre session n'est plus nécessaire. 
 
 \par Pour vous déconnecter, rien de plus simple :
 
-\begin{minted}[frame=single,linenos,mathescape]{bash}
+\begin{minted}[frame=single,mathescape]{bash}
 ThiDiff:~ hduser$ logout
 Connection to localhost closed.
 \end{minted}

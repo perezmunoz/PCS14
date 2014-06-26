@@ -1,14 +1,14 @@
 \section{Hadoop 1.2.1}
 \subsection{Préparation d'Hadoop}
 
-\par Toutes les versions de Hadoop sont téléchargeables sur le site de la fondation Apache. Cependant il est préférable de travailler avec des versions stables. C'est notamment le cas pour les versions 1.2.x, 2.2.x et 2.3.x. L'installation en \textit{Single-Node} est réalisée avec la version 1.2.1.
+\par Toutes les versions de Hadoop sont téléchargeables sur le site de la fondation Apache. Cependant il est préférable de travailler avec des versions stables. C'est notamment le cas pour les versions 1.2.x, 2.2.x et 2.3.x. L'installation en \emph{Single-Node} est réalisée avec la version 1.2.1.
 
 \par Sur le lien ci-dessous, téléchargez le fichier \texttt{hadoop-1.2.1.tar.gz}  (61 Mb) :\\
-\textit{http://apache.mirrors.multidist.eu/hadoop/common/hadoop-1.2.1/}
+\emph{http://apache.mirrors.multidist.eu/hadoop/common/hadoop-1.2.1/}
 
 \par Une fois téléchargé, décompressez-le, renommez-le en hadoop et placez-le dans \texttt{/usr/local}. Il est de plus très important de changer le propriétaire ainsi que les droits de ce fichier :
 
-\begin{minted}[frame=single,linenos,mathescape]{bash}
+\begin{minted}[frame=single,mathescape]{bash}
 ThiDiff:~ hduser$ cd /Users/hduser/Downloads
 ThiDiff:~ hduser$ mv hadoop-1.2.1 hadoop
 ThiDiff:~ hduser$ mv hadoop /usr/local
@@ -17,7 +17,7 @@ ThiDiff:~ hduser$ sudo chown hduser hadoop
 
 \par Vérifiez que le nouveau propriétaire du fichier hadoop est bien l'utilisateur \texttt{hduser} :
 
-\begin{minted}
+\begin{minted}[frame=single,mathescape]{bash}
 ThiDiff:~ hduser$ cd /usr/local
 ThiDiff:local hduser$ ls -lisa | grep hadoop
 26284444  0 drwxr-xr-x@  29 hduser   admin    986  3 mai 14:12 hadoop
@@ -53,7 +53,7 @@ share
 src
 \end{verbatim}
 
-\par Nous ne nous attardons que sur les dossiers \texttt{bin} et \texttt{conf} qui se sont montrés essentiels lors de notre étude d'Hadoop, laissant ainsi le lecteur s'intéresser de plus près aux autres fichiers.
+\par Nous ne nous attardons que sur les dossiers \texttt{bin} et \texttt{conf} qui se sont montrés essentiels lors de notre étude d'Hadoop, laissant ainsi le lecteur s'intéresser de plus près aux autres fichiers et dossiers.
 
 \par A titre anecdotique, les fichiers \texttt{hadoop-*.jar} contiennent les librairies nécessaires à la compilation et à l'exécution des exemples contenus notamment dans le fichier \texttt{hadoop-exam\\ples-1.2.1.jar} (WordCount, Pi, etc...).
 
@@ -64,7 +64,7 @@ start-all.sh
 stop-all.sh			
 \end{verbatim}
 
-\par Ces scripts shell vont permettent de lancer ou d'arrêter simultanément les différents démons d'Hadoop à savoir : le NameNode (NN), le SecondaryNameNode (SNN), le DataNode (DN), le JobTracker (JT) et le TaskTracker (TT). Pour de plus amples détails référez-vous à la partie \ref{sec:hdfs} détaillant les trois principaux démons HDFS. De plus il est possible de lancer au fur et à mesure les démons à l'aide des autres scripts :
+\par Ces scripts shell vont permettent de lancer ou d'arrêter simultanément les différents démons d'Hadoop à savoir : le \texttt{NameNode} (NN), le \texttt{SecondaryNameNode} (SNN), le \texttt{DataNode} (DN), le \texttt{JobTracker} (JT) et le \texttt{TaskTracker} (TT). Pour de plus amples détails référez-vous à la partie \ref{sec:hdfs} détaillant les trois principaux démons HDFS. De plus il est possible de lancer au fur et à mesure les démons à l'aide des autres scripts :
 
 \begin{verbatim}
 start-dfs.sh
@@ -74,7 +74,7 @@ stop-dfs.sh
 stop-mapred.sh
 \end{verbatim}
 
-\par Le script \texttt{start-dfs.sh} lance les démons propre à HDFS alors que \texttt{start-mapred.sh} ceux propre à MapReduce, c'est-à-dire le JobTracker et le TaskTracker.
+\par Le script \texttt{start-dfs.sh} lance les démons propre à HDFS alors que \texttt{start-mapred.sh} ceux propre à MapReduce, c'est-à-dire le \texttt{JobTracker} et le \texttt{TaskTracker}.
 
 \par Le dossier \texttt{conf} est le plus important puisqu'il contient les fichiers de configuration de Hadoop. Quatre fichiers détaillés par la suite sont placés au premier plan :
 
@@ -89,7 +89,7 @@ hdfs-site.xml
 
 \par Le fichier \texttt{.bashrc} contiendra l'ensemble des variables d'environnement essentielles ) Hadoop. Il est nécessaire qu'il soit lu. Pour ce faire, rappelons que lors de l'ouverture d'un shell interactif, certains fichiers sont automatiquement lus. Entre autres le fichier \texttt{.bash\_profile}. L'idée est de mettre un lien dans ce fichier vers notre fichier \texttt{.bashrc}. Vérifiez si les fichiers existent déjà. Le cas échéant, placez-vous dans \texttt{\$HOME}, et exécutez les commandes suivantes dans un Terminal :
 
-\begin{minted}[frame=single,linenos,mathescape]{bash}
+\begin{minted}[frame=single,mathescape]{bash}
 ThiDiff:~ hduser$ cd $HOME
 ThiDiff:~ hduser$ mkdir .bashrc
 ThiDiff:~ hduser$ mkdir .bash_profile
@@ -129,7 +129,7 @@ export HADOOP_HDFS_HOME=$HADOOP_HOME
 
 \par Le fichier \texttt{hadoop-env.sh} contient au final :
 
-\begin{minted}[frame=single,linenos,mathescape]{bash}
+\begin{minted}[frame=single,mathescape]{bash}
 # The java implementation to use. Required.
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_21.jdk
 		 /Contents/Home
@@ -141,44 +141,41 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_21.jdk
 
 \subsubsection{\texttt{core-site.xml}}
 
-\par Ce fichier XML contient les informations générales de Hadoop. Entre autres, il définit le dossier dans lequel Hadoop stockera les données temporaires lors de l'exécution des tâches. Il définit aussi le nom et le port du système de fichiers qui a rendu célèbre Hadoop : HDFS (\textit{Hadoop Distributed File System}).
+\par Ce fichier XML contient les informations générales de Hadoop. Entre autres, il définit le dossier dans lequel Hadoop stockera les données temporaires lors de l'exécution des tâches. Il définit aussi le nom et le port du système de fichiers qui a rendu célèbre Hadoop : HDFS (\emph{Hadoop Distributed File System}).
 
 \begin{minted}[frame=single,linenos,mathescape]{xml}
 <?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 
 <configuration>
-
-<property>
-	<name>hadoop.tmp.dir</name>
-	<value>/app/hadoop/tmp</value>
-	<description>Dossier contenant les fichiers temporaires generes
-	par Hadoop.
-	</description>
-</property>
-
-<property>
-   <name>fs.default.name</name>
-   <value>hdfs://localhost:54310</value>
- </property>
-
+  <property>
+    <name>hadoop.tmp.dir</name>
+    <value>/app/hadoop/tmp</value>
+    <description>Dossier contenant les fichiers temporaires generes
+    par Hadoop.
+    </description>
+  </property>
+  <property>
+    <name>fs.default.name</name>
+    <value>hdfs://localhost:54310</value>
+  </property>
 </configuration>
 \end{minted}
 
 \par \texttt{/app/hadoop/tmp} est le dossier contenant les données temporaires stockées par Hadoop aussi bien pour le système de fichier local que HDFS. Créez ce dossier et donnez à l'utilisateur \texttt{hduser} les droits d'accès en 750 :
 
-\begin{minted}[frame=single,linenos,mathescape]{bash}
+\begin{minted}[frame=single,mathescape]{bash}
 ThiDiff:~ hduser$ sudo mkdir -p /app/hadoop/tmp
 ThiDiff:~ hduser$ sudo chown hduser /app/hadoop/tmp
 ThiDiff:~ hduser$ sudo chmod 750 /app/hadoop/tmp
 \end{minted}
 
-\par Ne pas donner l'intégralité de ces droits à l'utilisateur \texttt{hduser}produira une exception \texttt{java.io.Exception} lors du formatage du NameNode (cf. partie~\ref{sec:format-nn}).
+\par Ne pas donner l'intégralité de ces droits à l'utilisateur \texttt{hduser}produira une exception \texttt{java.io.Exception} lors du formatage du \mathtt{NameNode} (cf. partie~\ref{sec:format-nn}).
 
 \subsubsection{\texttt{mapred-site.xml}}
 \label{sec:mapred-site.xml}
 
-\par Rappelons-le, Hadoop a deux principales composantes : HDFS et MapReduce. Ce fichier permet de configurer le deuxième point et plus particulièrement le JobTracker qui est le service d'Hadoop permettant de suivre les tâches. Pour cela on lui attribut un port sur lequel, par le biais d'une interface web on lira les informations concernant les jobs. Ce port peut être choisi de façon quelconque. Il faut de même s'assurer que celui-ci est libre. Ce qui peut se vérifier avec la commande \texttt{netstat}.
+\par Rappelons-le, Hadoop, dans ses versions 0.x et 1.x, a deux principales composantes : HDFS et MapReduce. Ce fichier permet de configurer le deuxième point et plus particulièrement le \texttt{JobTracker} qui est le service d'Hadoop permettant de suivre les tâches. Pour cela on lui attribut un port sur lequel, par le biais d'une interface web on lira les informations concernant les jobs. Ce port peut être choisi de façon quelconque. Il faut de même s'assurer que celui-ci est libre. Ce qui peut se vérifier avec la commande \texttt{netstat}.
 
 \par Le fichier \texttt{mapred-site.xml} doit contenir au final :
 
@@ -187,12 +184,10 @@ ThiDiff:~ hduser$ sudo chmod 750 /app/hadoop/tmp
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 
 <configuration>
-
-<property>
-	<name>mapred.job.tracker</name>
+  <property>
+    <name>mapred.job.tracker</name>
     <value>localhost:54311</value>
-</property>
-
+  </property>
 </configuration>
 \end{minted}
 
@@ -206,21 +201,19 @@ ThiDiff:~ hduser$ sudo chmod 750 /app/hadoop/tmp
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 
 <configuration>
-
-<property>
-	<name>dfs.replication</name>
-	<value>1</value>
-</property>
-
+  <property>
+    <name>dfs.replication</name>
+    <value>1</value>
+  </property>
 </configuration>
 \end{minted}
 
-\par La configuration basique d'Hadoop en mode \textit{Single-Node} ne nécessite que la modification des fichiers mentionnés précédemment. Pour le mode \textit{Multi-Node} nous verrons que les fichiers \texttt{/conf/masters} et \texttt{/conf/slaves} auront leur importance et que maîtres et esclaves sont configurés différemment. Reportez-vous à la partie~\ref{sec:hadoop-2.2} pour de plus amples détails.
+\par La configuration basique d'Hadoop en mode \emph{Single-Node} ne nécessite que la modification des fichiers mentionnés précédemment. Pour le mode \emph{Multi-Node} nous verrons que les fichiers \texttt{/conf/masters} et \texttt{/conf/slaves} auront leur importance et que maîtres et esclaves sont configurés différemment. Reportez-vous à la partie~\ref{sec:hadoop-2.2} pour de plus amples détails.
 
 \subsection{Formatage du NameNode}
 \label{sec:format-nn}
 
-\par La dernière étape restante avant de pouvoir lancer des jobs Hadoop est de formater le NameNode. Ce service Hadoop est la pièce maîtresse de HDFS en ce qu'il conserve la cartographie des blocs des fichiers HDFS au sein des différents DataNodes. Dans notre cas de figure (\textit{Single-Node}), un seul DataNode étant lancé, nous pouvons être certains que l'ensemble des données y sont stockés. Dans le cas plus générale, les blocs constituant les fichiers HDFS sont répartis au sein des divers DataNodes en tenant en compte le nombre de réplications paramétré.
+\par La dernière étape restante avant de pouvoir lancer des jobs Hadoop est de formater le NameNode. Ce service Hadoop est la pièce maîtresse de HDFS en ce qu'il conserve la cartographie des blocs des fichiers HDFS au sein des différents DataNodes. Dans notre cas de figure (\emph{Single-Node}), un seul DataNode étant lancé, nous pouvons être certains que l'ensemble des données y sont stockés. Dans le cas plus générale, les blocs constituant les fichiers HDFS sont répartis au sein des divers DataNodes en tenant en compte le nombre de réplications paramétré.
 
 \par Le formatage du NameNode permet d'effacer l'ensemble des données de HDFS. C'est équivalent à un RAZ. Cette étape n'est à réaliser qu'une seule fois lors de la mise en place de votre cluster Hadoop sous risque de perdre toutes les données HDFS préalablement chargées.
 
@@ -264,9 +257,9 @@ SHUTDOWN_MSG: Shutting down NameNode at ordinatrthidiff/192.168.1.66
 \par Globalement, les étapes du formatage sont les suivantes :
 
 \begin{itemize}
-\item lancement du NameNode;
+\item lancement du \texttt{NameNode};
 \item formatage;
-\item arrêt du NameNode.
+\item arrêt du \texttt{NameNode}.
 \end{itemize}
 
 \par Hadoop est désormais configuré. L'étape suivante consiste à lancer les différents services Hadoop.
@@ -274,11 +267,11 @@ SHUTDOWN_MSG: Shutting down NameNode at ordinatrthidiff/192.168.1.66
 \subsection{Lancement des services Hadoop}
 \label{sec:start-1.x-demons}
 
-\par Avant le lancement des servics Hadoop, vous devez vous connecter en SSH au \texttt{localhost}.
+\par Avant le lancement des services Hadoop, vous devez vous connecter en SSH au \texttt{localhost}.
 
-\par Il suffit ensuite de lancer le script shell fournit dans le dossier Hadoop pour lancer les services :
+\par Il suffit ensuite de lancer le script shell fourni dans le dossier Hadoop pour lancer les services :
 
-\begin{minted}[frame=single,linenos,mathescape]{bash}
+\begin{minted}[frame=single,mathescape]{bash}
 ThiDiff:~ hduser$ ssh localhost
 ThiDiff:~ hduser$ start-all.sh
 starting namenode, logging to /usr/local/hadoop/libexec/../logs/hadoop-
@@ -293,9 +286,9 @@ localhost: starting tasktracker, logging to /usr/local/hadoop/libexec/..
 /logs/hadoop-Hadoop-tasktracker-ordinatrthidiff.out
 \end{minted}
 
-\par On voit sur la sortie que le NameNode, le DataNode, le SecondaryNameNode, le JobTracker et le TaskTracker se sont bien lancés. Cependant il est bon de vérifier leur état à l'aide de la commande \texttt{jps} (\texttt{Java Virtual Machine Process Status Tool}).
+\par On voit sur la sortie que le \texttt{NameNode}, le \texttt{DataNode}, le \texttt{SecondaryNameNode}, le \texttt{JobTracker} et le \texttt{TaskTracker} se sont bien lancés. Cependant il est bon de vérifier leur état à l'aide de la commande \texttt{jps} (\texttt{Java Virtual Machine Process Status Tool}).
 
-\begin{minted}[frame=single,linenos,mathescape]{bash}
+\begin{minted}[frame=single,mathescape]{bash}
 ThiDiff:~ hduser$ jps
 10649 DataNode
 10891 TaskTracker
@@ -305,14 +298,14 @@ ThiDiff:~ hduser$ jps
 10737 SecondaryNameNode
 \end{minted}
 
-\par Nous sommes désormais sûrs que les services Hadoop se sont lancés correctement. Il se peut que NameNode ou le DataNode ne se lancent pas. Dans ce cas la solution la plus radicale et la plus efficace consiste à formater à nouveau le NameNode. Pour ce faire, vous devez arrêter les services et suivre la démarche détaillée précédemment.
+\par Nous sommes désormais sûrs que les services Hadoop se sont lancés correctement. Il se peut que \mathtt{NameNode} ou le \mathtt{DataNode} ne se lancent pas. Dans ce cas la solution la plus radicale et la plus efficace consiste à formater à nouveau le \mathtt{NameNode}. Pour ce faire, vous devez arrêter les services et suivre la démarche détaillée précédemment.
 
 \subsection{Arrêt des services Hadoop}
 \label{sec:arret-service-hadoop}
 
 \par L'arrêt des services Hadoop s'effectue avec :
 
-\begin{minted}[frame=single,linenos,mathescape]{bash}
+\begin{minted}[frame=single,mathescape]{bash}
 ThiDiff:~ hduser$ stop-all.sh
 stopping jobtracker
 localhost: stopping tasktracker

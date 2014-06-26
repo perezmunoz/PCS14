@@ -29,7 +29,7 @@ Yarn est responsable de la gestion des ressources, et utilise des processus simi
 \subsection{Connexion SSH}
 \label{sec:connexion-ssh}
 
-\par Lors d'une connexion SSH, le fichier \texttt{.bash\_profile} est executé. Lors d'un login, c'est le fichier \texttt{.bashrc} qui est exécuté. Comme toutes les connexions via hadoop se font par ssh, nous allons les lier tous les deux. Pour cela, on créera un fichier \texttt{.bash\_profile} contenant au moins :
+\par Lors d'une connexion SSH, le fichier \texttt{.bash\_profile} est exécuté. Lors d'un login, c'est le fichier \texttt{.bashrc} qui est exécuté. Comme toutes les connexions via hadoop se font par ssh, nous allons les lier tous les deux. Pour cela, on créera un fichier \texttt{.bash\_profile} contenant au moins :
 
 \begin{minted}[frame=single,linenos,mathescape]{bash}
   if [ -f .bashrc ]; then
@@ -39,7 +39,7 @@ Yarn est responsable de la gestion des ressources, et utilise des processus simi
 
 \par De cette manière, si le fichier \texttt{.bashrc} existe, on le charge, sinon on ne fait rien.
 \par On se connecte successivement sur \texttt{Ghome}, puis \texttt{Term2} :
-\begin{minted}[frame=single,linenos,mathescape]{bash}
+\begin{minted}[frame=single,mathescape]{bash}
   Alex > ssh ghome
   Last login: Sat Jun 14 22:00:38 2014 from 193.48.225.99
   Alex [gserver] > ssh term2
@@ -49,11 +49,11 @@ Yarn est responsable de la gestion des ressources, et utilise des processus simi
 
 \par A partir de \texttt{Term2}, on peut se connecter à chacune des machines du cluster Skynet, dont les alias permettent de simplifier les opérations. Ainsi au lieu de 
 
-\begin{minted}{bash}
+\begin{minted}[frame=single]{bash}
   ssh careil_ale@term2.grid.metz.supelec.fr
 \end{minted}
  on peut simplement faire
-\begin{minted}{bash}
+\begin{minted}[frame=single]{bash}
   ssh careil_ale@term2
 \end{minted}
 
@@ -61,16 +61,17 @@ car nous sommes dans le domaine \texttt{grid.metz.supelec.fr}.
 
  Il est inutile de spécifier le nom d'utilisateur lors de la connexion puisque, comme expliqué précédemment, notre compte existe sur toutes les machines (pas physiquement, mais il est chargé à chaque fois). Donc au lieu de se connecter avec la commande précédente, on peut simplement faire :
  
-\begin{minted}{bash}
+\begin{minted}[frame=single]{bash}
   ssh term2
 \end{minted}
 
 Cependant, il faut effectuer une manoeuvre afin de pouvoir se connecter facilement sans mot de passe. En effet, on va générer une clé SSH avec la commande \texttt{ssh-keygen} (qu'on appellera \texttt{id\_rsa\_test}). Vu qu'on ne veut pas utiliser de mot de passe pour se connecter, on omettra la \texttt{Passphrase} lors de la création de la clé.
 
-\begin{verbatim}
+\begin{minted}[frame=single]{bash}
 Alex > ssh-keygen
 Generating public/private rsa key pair.
-Enter file in which to save the key (/home/alexandre/.ssh/id_rsa): id_rsa_test
+Enter file in which to save the key (/home/alexandre/.ssh/id_rsa): 
+id_rsa_test
 Enter passphrase (empty for no passphrase): 
 Enter same passphrase again: 
 Your identification has been saved in id_rsa_test.
@@ -89,18 +90,18 @@ The key's randomart image is:
 |. o o+           |
 |   o=o.          |
 +-----------------+
-\end{verbatim}
+\end{minted}
 
 \par Maintenant, allons dans le dossier \texttt{.ssh} contenant notre clé publique, et notre clé privée afin de créer le fichier \texttt{authorized\_keys} s'il n'existe pas déjà. S'il n'existe pas, tapez la commande \texttt{touch authorized\_keys} afin de le créer.
 
 \par On va ajouter notre clé publique à l'ensemble des clés autorisées :
-\begin{verbatim}
+\begin{minted}[frame=single]{bash}
 cat id_rsa_test.pub >> authorized_keys
-\end{verbatim}
+\end{minted}
 \par On peut désormais vérifier que cela fonctionne bien en se connectant par exemple à \texttt{sh00}. Normalement, aucun mot de passe n'est demandé. 
 
 \par Un dernier problème peut empêcher une connexion directe en ssh, celui de la vérification d'authenticité de l'hôte sur lequel on veut se connecter : 
-\begin{verbatim}
+\begin{minted}[frame=single]{bash}
 Juan [master] > ssh munozperez_jua@ghomE.metz.supelec.fr
 The authenticity of host 'ghome.metz.supelec.fr (193.48.224.129)' 
 can't be established.
@@ -108,8 +109,7 @@ RSA key fingerprint is c1:41:c3:6d:f1:21:a2:2a:e6:30:b0:60:f7:de:22:b1.
 Are you sure you want to continue connecting (yes/no)? YES
 Warning: Permanently added 'ghome.metz.supelec.fr,193.48.224.129' 
 (RSA) to the list of known hosts.
-Last login: Sun Apr  6 21:20:11 2014 from 193.48.225.99
-\end{verbatim}
+\end{minted}
 
 \par Pour enlever ce message, il faut se connecter manuellement à chaque noeud pour qu'il soit ajouté à la liste des hôtes connus (listés dans le fichier \texttt{~/.ssh/known\_hosts}).
 
@@ -125,11 +125,8 @@ Last login: Sun Apr  6 21:20:11 2014 from 193.48.225.99
 
 \newpage
 
-\subsection{Création des fichiers de configuration de Hadoop}
+\subsection{Génération des fichiers de configuration de Hadoop grâce au \texttt{.bashrc}}
 \label{sec:creat-des-fich}
-
-\subsubsection{.bashrc}
-\label{sec:.bashrc}
 
 \par Ce fichier va nous permettre d'instancier des variables d'environnement utiles pour Hadoop au moment d'une connexion SSH. Comme expliqué précédemment, c'est le fichier \texttt{.bash\_profile} qui est chargé, mais nous ferons en sorte que ce dernier fasse appel au \texttt{.bashrc}, dont nous allons donc détailler le contenu.
 
@@ -164,7 +161,7 @@ export HADOOP_NAMENODE_NAME=localhost
 \par \texttt{HADOOP\_HOME}, \texttt{HADOOP\_COMMON\_HOME},
 \texttt{HADOOP\_HDFS\_HOME}, \texttt{HADOOP\_MAPRED\_HOME}, \\ \texttt{HADOOP\_YARN\_HOME}, sont les variables de base, spécifiant les chemins vers les divers composants de Hadoop. Dans notre cas, l'installation simple réunit tous les composants au même endroit, mais ce n'est pas tout le temps le cas. On les fixe donc toutes à \texttt{HADOOP\_PREFIX}.
 
-\par La variable \texttt{PATH} est utilisée par le Shell (bash dans notre cas) afin de faire correspondre chaque commande tapée avec un programme localisé dans un des dossiers spécifiés dans cette variable. Par défaut, on a généralement \texttt{PATH=/bin:/usr/bin:/usr/local/bin}, car les programmes installés par défaut (de type interne comme par exemple \texttt{ls}, \texttt{cat}... ) sont installés dans \texttt{/bin}. Ceux installés par l'utilisateur sont localisés dans \texttt{/usr/bin}. Les programmes nécessitant des privilèges administrateurs pour être exécutés sont dans \texttt{/usr/sbin}, et ce dossier n'est ajouté à la variable \texttt{PATH} que lorsqu'on est connecté avec le compte administrateur \texttt{root}.
+\par La variable \texttt{PATH} est utilisée par le Shell (bash dans notre cas) afin de faire correspondre chaque commande tapée avec un programme localisé dans un des dossiers spécifiés dans cette variable. Par défaut, on a généralement \texttt{PATH=/usr/local/bin:/usr/bin:/bin}, car les programmes installés par défaut (de type interne comme par exemple \texttt{ls}, \texttt{cat}... ) sont installés dans \texttt{/bin}. Ceux installés par l'utilisateur sont localisés dans \texttt{/usr/bin}. Les programmes nécessitant des privilèges administrateurs pour être exécutés sont dans \texttt{/usr/sbin}, et ce dossier n'est ajouté à la variable \texttt{PATH} que lorsqu'on est connecté avec le compte administrateur \texttt{root}.
 
 \par Les variables \texttt{HADOOP\_OPTS} et \texttt{HADOOP\_COMMON\_LIB\_NATIVE} permettent de spécifier respectivement le dossier dans lequel Java doit aller chercher les librairies (compilées car écrites en \texttt{C}), et le dossier contenant les librairies natives (ces mêmes librairies, mais compilées spécifiquement pour la machine sur laquelle Hadoop est exécuté).
 
@@ -231,14 +228,14 @@ if [ -n "$OAR_FILE_NODES" ]; then
     # Définition du nom du Namenode
     export HADOOP_NAMENODE_NAME=$(head -1 $OAR_FILE_NODES);
     for f in ~/hadoop_conf_original/*; do
-	cat $f | sed -e \ 
-	's/\$HADOOP_NAMENODE_NAME/'$HADOOP_NAMENODE_NAME'/g' \ 
-	> ~/hadoop_conf/$(basename $f);
+	cat $f | sed 
+        -e 's/\$HADOOP_NAMENODE_NAME/'$HADOOP_NAMENODE_NAME'/g' 
+        > ~/hadoop_conf/$(basename $f);
     done;
     cat $OAR_FILE_NODES | uniq > $HADOOP_CONF_DIR/slaves;
     for f in ~/hadoop_conf_slaves_original/*; do
-	cat $f | sed  \ 
-	-e 's/\$HADOOP_NAMENODE_NAME/'$HADOOP_NAMENODE_NAME'/g' \ 
+	cat $f | sed 
+        -e 's/\$HADOOP_NAMENODE_NAME/'$HADOOP_NAMENODE_NAME'/g'
 	> ~/hadoop_conf_slaves/$(basename $f);
     done;
 else
@@ -247,7 +244,7 @@ fi
 \end{minted}
 
 \par Expliquons donc ce gros morceau de code \texttt{bash}. On commence par créer s'ils n'existent pas, les dossiers sur la machine physique qui vont permettre de stocker les données. On suppose que toute machine est un \texttt{DataNode}, donc on créera d'abord le dossier \texttt{/tmp/hadoop-tmp}, puis dedans on créera un dossier \texttt{hdfs}, avant de finalement créer le dossier \texttt{datanode} qui contiendra les données du \texttt{DataNode}.
-\par Si on se connecte sur le \texttt{NameNode}, ce que l'on sait en vérifiant l'existence de la variable \texttt{OAR\_NODE\_FILE}, on ajoute deux dossiers supplémentaires \texttt{namenode} et \texttt{namesecondary}, respectivement pour le \texttt{NameNode} et le \mathtt{SecondaryNameNode}.
+\par Si on se connecte sur le \texttt{NameNode}, ce que l'on sait en vérifiant l'existence de la variable \texttt{OAR\_NODE\_FILE}, on ajoute deux dossiers supplémentaires \texttt{namenode} et \texttt{namesecondary}, respectivement pour le \texttt{NameNode} et le \texttt{SecondaryNameNode}.
 \par Une fois ces dossiers créés sur la machine physique (c'est-à-dire que si on se connecte sur une autre machine, ces dossiers n'apparaîtront pas), on crée les dossiers sur l'espace personnel qui vont accueillir les fichiers de configuration générés. Donc s'ils n'existent pas, on crée les dossiers \texttt{hadoop\_conf} et \texttt{~/hadoop\_conf\_slaves}, et s'ils existent déjà, c'est qu'ils ont probablement déjà accueilli des fichiers de configuration lors d'une précédente session \texttt{OAR}, dans ce cas on les vide.
 \par Dernière étape, lors de la connexion sur le \texttt{NameNode}, on génère les fichiers de configuration qui vont être utilisés !
 Pour cela, on redéfinit la variable \texttt{HADOOP\_NAMENODE\_NAME} en prenant le premier nom d'hôte dans la liste des hôtes fournis, accessible via la commande \texttt{cat \$OAR\_FILE\_NODE}. En fait, les variables \texttt{bash} ne sont pas évaluées dans les fichiers de configuration \texttt{xml} de Hadoop, d'où la nécessité d'en générer de nouveaux, avec les références au \texttt{NameNode} en dur. On crée donc chaque fichier à partir de son original, aussi bien pour \texttt{hadoop\_conf} que pour \texttt{hadoop\_conf\_slaves}, en remplaçant \texttt{HADOOP\_NAMENODE\_NAME} par sa valeur. Pour le dossier \texttt{hadoop\_conf}, on met à jour le fichier \texttt{slaves} grâce au contenu du fichier désigné par la variable \texttt{OAR\_FILE\_NODE}.
@@ -261,12 +258,12 @@ Pour cela, on redéfinit la variable \texttt{HADOOP\_NAMENODE\_NAME} en prenant 
 
 \par On se propose, pour éviter toute déconnexion hasardeuse lorsque des services seraient encore actifs, d'afficher un message de confirmation au moment de la déconnexion. Ce message ne s'afficherait que si le nombre de processus Java lancés est supérieur ou égal à 1. On voit les processus grâce à la commande \texttt{jps}. Cette commande retourne au moins une ligne, correspondant au processus \texttt{Jps}. Si le nombre de lignes retournées par cette commande est strictement supérieur à 1, il y a des processus Java lancés, et le message de confirmation s'affiche.
 
-\par Pour ce faire, on utilise une fonction auxiliaire (dont l'idée appartient à un bloggeur) \texttt{confirm} qui retourne une erreur \texttt{1} si on ne répond pas \texttt{yes}, et bloque la suite des opérations. En combinant cette fonction avec la commande \texttt{exit}, à l'aide de l'opérateur \texttt{&&}, si la fonction \texttt{confrm} ne s'exécute pas correctement (si on n'a pas répondu \texttt{yes}), la commande placée après ne s'exécute pas.
+\par Pour ce faire, on utilise une fonction auxiliaire (dont l'idée appartient à un bloggeur) \texttt{confirm} qui retourne une erreur \texttt{1} si on ne répond pas \texttt{yes}, et bloque la suite des opérations. En combinant cette fonction avec la commande \texttt{exit}, à l'aide de l'opérateur \texttt{&&}, si la fonction \texttt{confirm} ne s'exécute pas correctement (si on n'a pas répondu \texttt{yes}), la commande placée après ne s'exécute pas.
 \begin{verbatim}
 confirm Logout ? && exit;
 \end{verbatim}
 
-\par En ayant connaissance de cette astuce, on crée donc la fonction testExit qui va tester le nombre de lignes retournées par \texttt{jps}, et on le prend supérieur strictement à 1. Sinon on ne met pas de message de confirmation.
+\par En ayant connaissance de cette astuce, on crée donc la fonction \texttt{testExit} qui va tester le nombre de lignes retournées par \texttt{jps}, et on le prend supérieur strictement à 1. Sinon on ne met pas de message de confirmation.
 \begin{minted}[frame=single,linenos,mathescape]{bash}
 function confirm()
 {
@@ -287,8 +284,8 @@ function confirm()
 function testExit()
 {
     if [[ "$(jps|wc -l)" -gt "1" ]]; then
-	confirm Avez-vous bien arrêté tous les processus Java ?\ 
-        \(commande jps\) yes/no && logout;
+    confirm Avez-vous bien arrêté tous les processus Java ? 
+    \(commande jps\) yes/no && logout;
     else
 	logout;
     fi
@@ -298,6 +295,345 @@ alias exit="testExit";
 \end{minted}
 
 \par Note concernant l'utilisation de \texttt{logout} : on n'utilise pas la fonction \texttt{exit} dans la déclaration de \texttt{testExit}, car l'idée est de définir exit comme alias de cette fonction. Donc si on appelait \texttt{exit} dans \texttt{testExit}, elle s'appellerait à l'infini, d'où l'astuce du \texttt{logout}.
+
+\par Pour continuer dans la lignée des améliorations, on remarquera que l'appel de la fonction \texttt{exit} dans notre fonction \texttt{testExit} n'est autre que la fonction \texttt{builtin exit}, qui est la fonction prédéfinie (qualifiée d'interne) et faisant partie intégrante du Shell \texttt{bash}. Une méthode plus propre aurait donc été de redéfinir la fonction \texttt{exit} à partir de la fonction interne du même nom.
+\par Rappelons au passage qu'il existe deux types de fonctions lorsqu'on utilise un Shell : les fonctions internes, et les fonctions externes. Les fonctions internes font partie de l'ensemble des fonctions fournies avec le Shell (\texttt{bash} dans notre cas), alors que les fonctions externes sont les fonctions accessibles du fait de l'installation de programmes tiers. Par exemple, la fonction \texttt{hdfs} est une commande externe, alors que \texttt{ls} est une fonction interne. En spécifiant \texttt{builtin ls}, on fait appel à la fonction de base fournie avec le logiciel \texttt{bash}.
+\par Conclusion, au lieu d'avoir une fonction \texttt{testExit} qu'on utilise pour un alias de la fonction \texttt{exit}, redéfinissons simplement la fonction \texttt{exit} à partir de sa version interne :
+
+\begin{minted}[frame=single,linenos,mathescape]{bash}
+function exit()
+{
+    if [[ "$(jps|wc -l)" -gt "1" ]]; then
+	confirm Avez-vous bien arrêté tous les processus Java ?
+        \(commande jps\) yes/no && builtin exit;
+    else
+	builtin exit;
+    fi
+}
+\end{minted}
+
+\subsection{Contenu des fichiers de configuration de Hadoop}
+\label{sec:contenu-des-fichiers}
+
+\par Venons-en maintenant aux fichiers qui vont permettre la génération des fichiers de configuration finals, spécifiques de la session \texttt{OAR}. Ces fichiers ont quasiment la même utilité que pour les versions précédentes de Hadoop, seules les propriétés peuvent avoir changé de nom (par exemple, un "\texttt{\_}" peut avoir été changé en "\texttt{.}" pour certaines propriétés, semant la confusion chez ceux qui tentent de configurer Hadoop correctement...)
+
+\subsubsection{\texttt{core-site.xml}}
+\label{sec:core-site.xml}
+
+\par Dans ce fichier, nous configurons les paramètres généraux de HDFS et de Hadoop en général. Nous retrouverons ainsi la localisation du dossier temporaire sur la machine pour y stocker les fichiers temporaires générés lors de manipulations diverses. Egalement, \texttt{fs.default.name} est la variable spécifiant l'adresse à laquelle on effectue les demandes au système de fichiers distribué HDFS.
+\par On ne met pas le nom d'une machine en dur, car comme expliqué précédemment, la variable \texttt{\$HADOOP\_NAMENODE\_NAME} sera remplacée par le nom de la machine qui hébergera le \texttt{NameNode}, nom dépendant de la session \texttt{OAR}.
+
+\par Notons enfin que \texttt{9100} est un port qui doit être libre sur la machine accueillant le \texttt{NameNode}.
+
+\begin{minted}[mathescape,frame=single,linenos]{xml}
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+  <property>
+    <name>hadoop.tmp.dir</name>
+    <value>/tmp/hadoop-tmp</value>
+    <description>A base for other temporary directories.</description>
+  </property>
+  <property>
+    <name>fs.default.name</name>
+    <value>hdfs://$HADOOP_NAMENODE_NAME:9100/</value>
+  </property>
+</configuration>
+\end{minted}
+
+\subsubsection{\texttt{hdfs-site.xml}}
+\label{sec:hdfs-site.xml-1}
+
+\par Ce dossier est spécifique du système de fichiers HDFS. Il permet de régler la localisation des espaces de stockage pour les \texttt{NameNode}, \texttt{SecondaryNameNode}, \texttt{DataNode} sur les machines physiques. Il permet également de spécifier le taux de réplication des données sur l'espace distribué (qui correspond au nombre de fois qu'un fichier est stocké de manière répartie sur les \texttt{DataNodes}.
+
+\par Nous prenons soin de déterminer les adresses d'accès aux \texttt{DataNodes}, \texttt{NameNode} et \texttt{SecondaryNameNode} pour des raisons d'encombrement de ports, problème sur lequel nous reviendrons plus loin.
+
+\begin{minted}[mathescape,frame=single,linenos]{xml}
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+  <property>
+    <name>dfs.replication</name>
+    <value>2</value>
+    <description>Default block replication.
+    The actual number of replications can be specified when 
+    the file is created.
+    The default of 3 is used if replication is not specified.
+    </description>
+  </property>
+  <property>
+    <name>dfs.namenode.name.dir</name>
+    <value>file:/tmp/hadoop-tmp/hdfs/namenode</value>
+  </property>
+  <property>
+    <name>dfs.datanode.data.dir</name>
+    <value>file:/tmp/hadoop-tmp/hdfs/datanode</value>
+  </property>
+  <property>
+    <name>fs.checkpoint.dir</name>
+    <value>file:/tmp/hadoop-tmp/hdfs/namesecondary</value>
+  </property>
+
+  <property>
+    <name>dfs.datanode.address</name>
+    <value>localhost:0</value>
+  </property>
+  <property>
+    <name>dfs.namenode.http-address</name>
+    <value>$HADOOP_NAMENODE_NAME:9001</value>
+  </property>
+  <property>
+    <name>dfs.namenode.secondary.http-address</name>
+    <value>$HADOOP_NAMENODE_NAME:4501</value>
+  </property>
+</configuration>
+\end{minted}
+
+\subsubsection{\texttt{mapred-site.xml}}
+\label{sec:mapred-site.xml-1}
+
+\begin{minted}[mathescape,frame=single,linenos]{xml}
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+  <property>
+    <name>mapred.job.tracker</name>
+    <value>${HADOOP_NAMENODE_NAME}:54311</value>
+    <description>The host and port that the MapReduce job tracker runs
+      at.  If "local", then jobs are run in-process as a single map
+      and reduce task.
+    </description>
+  </property>
+  <property>
+    <name>mapreduce.framework.name</name>
+    <value>yarn</value>
+  </property>
+</configuration>
+\end{minted}
+
+\subsubsection{\texttt{yarn-site.xml}}
+\label{sec:yarn-site.xml}
+
+\par Ce fichier est très important, car il permet de configurer \emph{Yarn}, le gestionnaire de ressources et déployeur d'applications de Hadoop dans ses versions récentes 2.x.
+\par On laissera par défaut le \texttt{classpath} de \emph{Yarn}, ce qui nous épargnera bien des soucis. 
+
+\par \texttt{yarn.nodemanager.aux-services.mapreduce\_shuffle.class} est la classe chargée d'effectuer le tri lors d'une application MapReduce (ce qui explique le fait que les entrées soient triées dans un ordre non aléatoire lors d'un wordcount par exemple).
+
+\par L'adresse \texttt{0.0.0.0} représente l'adresse locale de la machine, elle permet à une machine de faire appel à son nodemanager lancé sur un port précis.
+
+\begin{minted}[mathescape,frame=single,linenos]{xml}
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+  <property>
+     <name>yarn.nodemanager.aux-services</name>
+     <value>mapreduce_shuffle</value>
+  </property>
+  <property>
+     <name>yarn.nodemanager.aux-services.mapreduce_shuffle.class</name>
+     <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+  </property>
+  <property>
+    <name>yarn.log-aggregation-enable</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>yarn.dispatcher.exit-on-error</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>yarn.app.mapreduce.am.staging-dir</name>
+    <value>/user</value>
+  </property>
+
+  <property>
+    <name>yarn.resourcemanager.scheduler.address</name>
+    <value>$HADOOP_NAMENODE_NAME:8030</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.resource-tracker.address</name>
+    <value>$HADOOP_NAMENODE_NAME:8031</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.address</name>
+    <value>$HADOOP_NAMENODE_NAME:8032</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.admin.address</name>
+    <value>$HADOOP_NAMENODE_NAME:8033</value>
+  </property>
+  <property>
+    <name>yarn.web-proxy.address</name>
+    <value>$HADOOP_NAMENODE_NAME:8034</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.webapp.address</name>
+    <value>$HADOOP_NAMENODE_NAME:8088</value>
+  </property>
+  <property>
+    <name>yarn.nodemanager.address</name>
+    <value>0.0.0.0:8050</value>
+  </property>
+    <property>
+    <name>yarn.nodemanager.localizer.address</name>
+    <value>0.0.0.0:8060</value>
+  </property>
+</configuration>
+\end{minted}
+
+\subsubsection{\texttt{capacity-scheduler.xml}}
+\label{sec:capac-sched-site.xml}
+
+\par Tout d'abord, commençons par souligner l'intérêt du nom des fichiers. En effet, certains tutoriels disponibles sur internet sont assez laxistes quant aux indications, et il s'est trouvé qu'un d'entre eux a indiqué que le présent fichier \texttt{capacity-scheduler.xml} s'appelait \texttt{capacity-scheduler-site.xml}, une erreur qui nous a coûté beaucoup de temps.
+
+\begin{minted}[mathescape,frame=single,linenos]{xml}
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+  <property>
+    <name>yarn.scheduler.capacity.maximum-am-resource-percent</name>
+    <value>0.1</value>
+  </property>
+  <property>
+    <name>yarn.scheduler.capacity.root.queues</name>
+    <value>default</value>
+  </property>
+  <property>
+    <name>yarn.scheduler.capacity.root.default.capacity</name>
+    <value>100</value>
+  </property>
+  <property>
+    <name>yarn.scheduler.capacity.root.default.user-limit-factor</name>
+    <value>1</value>
+  </property>
+  <property>
+    <name>yarn.scheduler.capacity.root.queues</name>
+    <value>default</value>
+  </property>
+  <property>
+    <name>yarn.scheduler.capacity.root.default.maximum-capacity</name>
+    <value>100</value>
+  </property>
+  <property>
+    <name>yarn.scheduler.capacity.root.default.state</name>
+    <value>RUNNING</value>
+  </property>
+  <property>
+    <name>
+      yarn.scheduler.capacity.root.default.acl_submit_applications
+    </name>
+    <value>*</value>
+  </property>
+  <property>
+    <name>
+      yarn.scheduler.capacity.root.default.acl_administer_queue
+    </name>
+    <value>*</value>
+  </property>
+  <property>
+    <name>yarn.scheduler.capacity.node-locality-delay</name>
+    <value>-1</value>
+  </property>
+</configuration>
+\end{minted}
+
+\subsubsection{\texttt{hadoop-env.sh} et \texttt{yarn-env.sh}}
+\label{sec:hadoop-env.sh-et}
+
+\par Ces deux fichiers permettent de déclarer des variables d'environnement utilisées par Hadoop. Pourquoi donc avoir remplacé les variables \texttt{\$HADOOP\_NAMENODE\_NAME} ? Puisque celles-ci auraient pu être simplement définies dans ces fichiers... Nous avons essayé, et cela n'a pas fonctionné. De même que le \texttt{classpath} de \emph{Yarn} était défini à l'aide de telles variables, ces variables n'étaient pas interprétées, ce qui se traduisait donc par une erreur lors du déploiement d'une application sur les noeuds.
+
+\par \texttt{hadoop-env.sh} et \texttt{yarn-env.sh} sont exactement les mêmes fichiers dans notre cas.
+
+\begin{minted}[mathescape,frame=single,linenos]{bash}
+export HADOOP_HEAPSIZE="500"
+export HADOOP_NAMENODE_INIT_HEAPSIZE="500"
+
+export JAVA_HOME=/usr/lib/jvm/java
+
+export HADOOP_HOME=/opt/hadoop-2.2.0
+export HADOOP_CONF_DIR=~/hadoop_conf
+export HADOOP_OPTS=-Djava.net.preferIPv4Stack=true
+
+export HADOOP_OPTS="$HADOOP_OPTS -Djava.library.path=$HADOOP_HOME/lib/"
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME"/lib/native/"
+
+export HADOOP_COMMON_HOME=/opt/hadoop-2.2.0
+export HADOOP_HDFS_HOME=/opt/hadoop-2.2.0
+export HADOOP_MAPRED_HOME=/opt/hadoop-2.2.0
+export HADOOP_YARN_HOME=/opt/hadoop-2.2.0
+export HADOOP_LOG_DIR=~/hadoop_logs
+export YARN_LOG_DIR=~/yarn_logs
+
+export YARN_CONF_DIR=~/hadoop_conf
+\end{minted}
+
+
+\subsection{Lancement des services hadoop}
+\label{sec:lanc-des-serv}
+
+\par Démarrons désormais depuis zéro hadoop et tous ses composants.
+
+\par Commençons par se connecter à \texttt{Ghome}, puis \texttt{Term2}
+
+\begin{minted}[frame=single]{bash}
+ssh careil_ale@ghome.metz.supelec.fr
+\end{minted}
+
+puis
+
+\begin{minted}[frame=single]{bash}
+ssh term2
+\end{minted}
+
+\par Lançons une session \texttt{OAR}, afin d'avoir des noeuds à disposition, et faire fonctionner Hadoop dessus.
+
+\begin{minted}[frame=single]{bash}
+oarsub -l nodes=4,walltime=01:00:00 -I
+\end{minted}
+
+\par Nous avons donc quatre noeuds, et nos fichiers de configuration hadoop ont été générés dans \texttt{hadoop\_conf}.
+
+\par Formattons le namenode (il faudra le faire à chaque fois qu'on démarrera une nouvelle session \texttt{OAR}, les noeuds alloués étant en théorie différents à chaque fois).
+\begin{minted}[frame=single]{bash}
+hdfs namenode -format
+\end{minted}
+
+\par Ceci fait, démarrons tous les services hadoop à l'aide du script prévu à cet effet :
+\begin{minted}[frame=single]{bash}
+start-all.sh
+\end{minted}
+
+\par Normalement, tous les services ont été lancés, les \texttt{DataNodes} et \texttt{NodeManagers} sont lancés sur tous les noeuds esclaves.
+
+\par Construisons un dossier dans HDFS, afin de pouvoir y stocker nos données :
+
+\begin{minted}[frame=single]{bash}
+hdfs dfs -mkdir -p /user/careil_ale
+\end{minted}
+
+\par Copions-y un fichier texte
+
+\begin{minted}[frame=single]{bash}
+hdfs dfs -copyFromLocal ~/texte.txt /user/careil_ale/input
+\end{minted}
+
+\par Appliquons le wordcount dessus :
+
+\begin{minted}[frame=single]{bash}
+hadoop jar 
+$HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.2.0.jar 
+wordcount input outputWordCount
+\end{minted}
+
+\par Pour visualiser le résultat, récupérer les fichiers générés depuis HDFS :
+
+\begin{minted}[frame=single]{bash}
+hdfs dfs -copyToLocal 
+/user/careil_ale/outputWordCount/part* 
+~/outputWordCount_texte.txt
+\end{minted}
+
+
 
 %%% Local Variables: 
 %%% mode: latex
